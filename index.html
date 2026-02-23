@@ -567,7 +567,7 @@ tbody tr:hover td { background:rgba(217,119,6,.03) }
         <label>班級<span class="req">*</span></label>
         <div class="f-wrap">
           <span class="f-ico">🏫</span>
-          <input class="f-in" type="text" id="s-cls" placeholder="例：五年甲班" autocomplete="off">
+          <input class="f-in" type="text" id="s-cls" placeholder="例：101" autocomplete="off">
         </div>
       </div>
       <div class="f-grp">
@@ -661,7 +661,7 @@ tbody tr:hover td { background:rgba(217,119,6,.03) }
     <div class="sbox st-amber">
       <div class="sbox-t">👤 學生資料</div>
       <div class="fg-grid">
-        <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="f-cls" placeholder="例：五年甲班"></div>
+        <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="f-cls" placeholder="例：101"></div>
         <div class="fg"><label>姓名<span class="req">*</span></label><input class="fi" type="text" id="f-nm" placeholder="請輸入真實姓名"></div>
       </div>
     </div>
@@ -720,8 +720,12 @@ tbody tr:hover td { background:rgba(217,119,6,.03) }
           <input class="fi" type="text" id="lbQ" placeholder="搜尋姓名或班級…" oninput="filterLB()">
           <select class="fs" id="lbGr" style="max-width:130px" onchange="filterLB()">
             <option value="">所有年級</option>
-            <option>一年</option><option>二年</option><option>三年</option>
-            <option>四年</option><option>五年</option><option>六年</option>
+            <option value="1">1 年級</option>
+            <option value="2">2 年級</option>
+            <option value="3">3 年級</option>
+            <option value="4">4 年級</option>
+            <option value="5">5 年級</option>
+            <option value="6">6 年級</option>
           </select>
         </div>
         <ul class="lb-list" id="lbBookList"><li class="loading"><span class="spin"></span>載入中…</li></ul>
@@ -868,7 +872,7 @@ tbody tr:hover td { background:rgba(217,119,6,.03) }
   <div class="lookup-card">
     <div class="card-title">🔍 查詢個人閱讀進度</div>
     <div class="fg-grid" style="max-width:500px">
-      <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="lk-cls" placeholder="例：五年甲班"></div>
+      <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="lk-cls" placeholder="例：101"></div>
       <div class="fg"><label>姓名<span class="req">*</span></label><input class="fi" type="text" id="lk-nm" placeholder="請輸入姓名" onkeydown="if(event.key==='Enter')lookupStudent()"></div>
     </div>
     <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap">
@@ -916,7 +920,7 @@ tbody tr:hover td { background:rgba(217,119,6,.03) }
   <div class="ci-form">
     <div class="ci-title">📚 新增閱讀打卡</div>
     <div class="fg-grid">
-      <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="ci-cls" placeholder="例：五年甲班"></div>
+      <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="ci-cls" placeholder="例：101"></div>
       <div class="fg"><label>姓名<span class="req">*</span></label><input class="fi" type="text" id="ci-nm" placeholder="請輸入真實姓名"></div>
       <div class="fg full"><label>書名<span class="req">*</span></label><input class="fi" type="text" id="ci-title" placeholder="請輸入書名"></div>
       <div class="fg full">
@@ -962,7 +966,7 @@ tbody tr:hover td { background:rgba(217,119,6,.03) }
     <div class="modal-title" id="editTitle">✏️ 編輯紀錄</div>
     <input type="hidden" id="editId">
     <div class="fg-grid">
-      <div class="fg"><label>班級</label><input class="fi" type="text" id="e-cls" placeholder="五年甲班"></div>
+      <div class="fg"><label>班級</label><input class="fi" type="text" id="e-cls" placeholder="101"></div>
       <div class="fg"><label>姓名</label><input class="fi" type="text" id="e-nm"></div>
       <div class="fg"><label>書名</label><input class="fi" type="text" id="e-title"></div>
       <div class="fg"><label>作者</label><input class="fi" type="text" id="e-author"></div>
@@ -1002,16 +1006,16 @@ var curFilter = 'pending';
 
 /* ──────── MOCK DATA ──────── */
 var DB = [
-  {id:1,  ts:'2024-01-15', nm:'陳小明', cls:'五年甲班', title:'小王子',            author:'聖修伯里',     pub:'小天下',   review:'這是一本非常感人的書，讓我思考了很多生命中真正重要的事情。小王子的純真讓我印象深刻，他對朋友的珍視和對玫瑰的愛，都讓我感到深深的感動。讀完之後，我更珍惜身邊的人了。每個大人心裡都曾住著一個小王子，提醒自己不要忘記最初的純真。',     status:'pending',  note:''},
-  {id:2,  ts:'2024-01-14', nm:'李小花', cls:'四年乙班', title:'故事藥方',           author:'埃拉·法蘭西', pub:'遠流',     review:'這本書介紹了很多書籍，說明在不同的心情或情況下可以閱讀哪些書。我覺得非常有趣，讓我想要去閱讀書中推薦的每一本書。作者的文筆很優美，讀起來非常流暢。書中還有很多插圖，讓我更容易想像書裡描述的場景，是一本讓我愛不釋手的好書。',     status:'approved', note:'文筆流暢，推薦'},
-  {id:3,  ts:'2024-01-13', nm:'王大雄', cls:'六年甲班', title:'追風箏的孩子',       author:'卡勒德·胡賽尼',pub:'木馬文化', review:'這本書讓我哭了很多次，故事描述兩個孩子之間的友情與背叛，以及成年後的救贖。作者的文字非常有力量，讓我對阿富汗有了不同的認識，也讓我思考友情的真諦。讀完後，我深刻感受到：要有勇氣承認錯誤，才能得到真正的救贖。',             status:'approved', note:''},
-  {id:4,  ts:'2024-01-12', nm:'張小英', cls:'三年丙班', title:'昆蟲記',             author:'法布爾',       pub:'親子天下', review:'我很喜歡這本書，裡面介紹了很多昆蟲的生態和行為，讓我對昆蟲有了全新的認識。法布爾的觀察非常仔細，描述昆蟲的方式就像在說故事一樣。書中蟬的生命週期讓我印象深刻，原來牠們要在地下等待好幾年才能飛翔。這讓我學到了耐心的重要性。',         status:'pending',  note:''},
-  {id:5,  ts:'2024-01-11', nm:'林小智', cls:'五年乙班', title:'十萬個為什麼',       author:'米·伊林',      pub:'文盛書局', review:'這本書回答了很多生活中的問題，讓我了解了很多科學知識。我最喜歡關於水和空氣的部分，原來我們每天接觸的事物背後都有這麼多有趣的科學原理！讀完後我想繼續探索更多科學的奧秘。',                                                     status:'rejected', note:'字數不足，請補充'},
-  {id:6,  ts:'2024-01-10', nm:'陳小明', cls:'五年甲班', title:'哈利波特：神秘的魔法石',author:'J.K.羅琳',  pub:'皇冠',     review:'這是一本讓我愛不釋手的書！哈利波特的故事充滿了魔法和冒險，讓我一直想知道接下來會發生什麼事。書中的角色都非常立體，赫敏的聰明和榮恩的忠誠都讓我喜歡。最讓我感動的是，哈利在霍格華茲找到了真正屬於自己的家。',               status:'approved', note:''},
-  {id:7,  ts:'2024-01-09', nm:'黃小美', cls:'二年甲班', title:'彩虹魚',             author:'馬可斯·費斯特',pub:'上誼',     review:'彩虹魚非常漂亮，他學會了分享讓我很感動。書裡面的圖畫非常美麗，閃閃發光的鱗片讓人想要摸一摸。我也要學習彩虹魚，把好東西和朋友分享。媽媽說，分享是最美好的事情，讀完這本書我更加明白了這個道理，以後我也要把玩具和好朋友分享。',               status:'approved', note:''},
-  {id:8,  ts:'2024-01-08', nm:'吳小強', cls:'一年乙班', title:'好餓的毛毛蟲',       author:'艾瑞·卡爾',   pub:'上誼',     review:'毛毛蟲吃了很多東西最後變成蝴蝶！我很喜歡這本書，因為圖片很漂亮，顏色很鮮豔。老師說這叫做蛻變，就像我們努力學習，也會變得更好更厲害。毛毛蟲的故事讓我明白，只要努力，每個人都能變成更好的自己，這讓我受到很大的鼓勵。',                 status:'approved', note:''},
-  {id:9,  ts:'2024-01-07', nm:'林小雨', cls:'六年乙班', title:'老人與海',           author:'海明威',       pub:'志文',     review:'這是一本非常震撼的書，老漁夫聖地亞哥獨自出海，與巨大的馬林魚搏鬥了三天三夜，最終卻被鯊魚吃掉。但老人不放棄的精神深深打動了我。他雖然失敗了，卻展現了人類對抗命運的勇氣。那句「人可以被毀滅，但不可以被打敗」讓我深思，激勵我面對困難不輕易放棄。', status:'approved', note:''},
-  {id:10, ts:'2024-01-06', nm:'陳小雅', cls:'四年甲班', title:'夏洛的網',           author:'懷特',         pub:'遠流',     review:'這是一本令人感動落淚的友情故事。蜘蛛夏洛為了救好朋友威爾伯，用生命編織出美麗的詞語。夏洛最後雖然死了，但她的孩子們繼承了她的精神。讀完這本書，我更珍惜和好朋友之間的情誼。友情是世界上最珍貴的東西，真正的朋友會在你最需要的時候出現，無私付出。',  status:'pending',  note:''},
+  {id:1,  ts:'2024-01-15', nm:'陳小明', cls:'501', title:'小王子',            author:'聖修伯里',     pub:'小天下',   review:'這是一本非常感人的書，讓我思考了很多生命中真正重要的事情。小王子的純真讓我印象深刻，他對朋友的珍視和對玫瑰的愛，都讓我感到深深的感動。讀完之後，我更珍惜身邊的人了。每個大人心裡都曾住著一個小王子，提醒自己不要忘記最初的純真。',     status:'pending',  note:''},
+  {id:2,  ts:'2024-01-14', nm:'李小花', cls:'402', title:'故事藥方',           author:'埃拉·法蘭西', pub:'遠流',     review:'這本書介紹了很多書籍，說明在不同的心情或情況下可以閱讀哪些書。我覺得非常有趣，讓我想要去閱讀書中推薦的每一本書。作者的文筆很優美，讀起來非常流暢。書中還有很多插圖，讓我更容易想像書裡描述的場景，是一本讓我愛不釋手的好書。',     status:'approved', note:'文筆流暢，推薦'},
+  {id:3,  ts:'2024-01-13', nm:'王大雄', cls:'601', title:'追風箏的孩子',       author:'卡勒德·胡賽尼',pub:'木馬文化', review:'這本書讓我哭了很多次，故事描述兩個孩子之間的友情與背叛，以及成年後的救贖。作者的文字非常有力量，讓我對阿富汗有了不同的認識，也讓我思考友情的真諦。讀完後，我深刻感受到：要有勇氣承認錯誤，才能得到真正的救贖。',             status:'approved', note:''},
+  {id:4,  ts:'2024-01-12', nm:'張小英', cls:'301', title:'昆蟲記',             author:'法布爾',       pub:'親子天下', review:'我很喜歡這本書，裡面介紹了很多昆蟲的生態和行為，讓我對昆蟲有了全新的認識。法布爾的觀察非常仔細，描述昆蟲的方式就像在說故事一樣。書中蟬的生命週期讓我印象深刻，原來牠們要在地下等待好幾年才能飛翔。這讓我學到了耐心的重要性。',         status:'pending',  note:''},
+  {id:5,  ts:'2024-01-11', nm:'林小智', cls:'502', title:'十萬個為什麼',       author:'米·伊林',      pub:'文盛書局', review:'這本書回答了很多生活中的問題，讓我了解了很多科學知識。我最喜歡關於水和空氣的部分，原來我們每天接觸的事物背後都有這麼多有趣的科學原理！讀完後我想繼續探索更多科學的奧秘。',                                                     status:'rejected', note:'字數不足，請補充'},
+  {id:6,  ts:'2024-01-10', nm:'陳小明', cls:'501', title:'哈利波特：神秘的魔法石',author:'J.K.羅琳',  pub:'皇冠',     review:'這是一本讓我愛不釋手的書！哈利波特的故事充滿了魔法和冒險，讓我一直想知道接下來會發生什麼事。書中的角色都非常立體，赫敏的聰明和榮恩的忠誠都讓我喜歡。最讓我感動的是，哈利在霍格華茲找到了真正屬於自己的家。',               status:'approved', note:''},
+  {id:7,  ts:'2024-01-09', nm:'黃小美', cls:'201', title:'彩虹魚',             author:'馬可斯·費斯特',pub:'上誼',     review:'彩虹魚非常漂亮，他學會了分享讓我很感動。書裡面的圖畫非常美麗，閃閃發光的鱗片讓人想要摸一摸。我也要學習彩虹魚，把好東西和朋友分享。媽媽說，分享是最美好的事情，讀完這本書我更加明白了這個道理，以後我也要把玩具和好朋友分享。',               status:'approved', note:''},
+  {id:8,  ts:'2024-01-08', nm:'吳小強', cls:'101', title:'好餓的毛毛蟲',       author:'艾瑞·卡爾',   pub:'上誼',     review:'毛毛蟲吃了很多東西最後變成蝴蝶！我很喜歡這本書，因為圖片很漂亮，顏色很鮮豔。老師說這叫做蛻變，就像我們努力學習，也會變得更好更厲害。毛毛蟲的故事讓我明白，只要努力，每個人都能變成更好的自己，這讓我受到很大的鼓勵。',                 status:'approved', note:''},
+  {id:9,  ts:'2024-01-07', nm:'林小雨', cls:'602', title:'老人與海',           author:'海明威',       pub:'志文',     review:'這是一本非常震撼的書，老漁夫聖地亞哥獨自出海，與巨大的馬林魚搏鬥了三天三夜，最終卻被鯊魚吃掉。但老人不放棄的精神深深打動了我。他雖然失敗了，卻展現了人類對抗命運的勇氣。那句「人可以被毀滅，但不可以被打敗」讓我深思，激勵我面對困難不輕易放棄。', status:'approved', note:''},
+  {id:10, ts:'2024-01-06', nm:'陳小雅', cls:'401', title:'夏洛的網',           author:'懷特',         pub:'遠流',     review:'這是一本令人感動落淚的友情故事。蜘蛛夏洛為了救好朋友威爾伯，用生命編織出美麗的詞語。夏洛最後雖然死了，但她的孩子們繼承了她的精神。讀完這本書，我更珍惜和好朋友之間的情誼。友情是世界上最珍貴的東西，真正的朋友會在你最需要的時候出現，無私付出。',  status:'pending',  note:''},
 ];
 
 /* ──────── HELPER UTILITIES ──────── */
@@ -1237,8 +1241,8 @@ function renderHomeLB() {
   ul.innerHTML=html;
 }
 function renderHomeChart() {
-  var gs=['一年','二年','三年','四年','五年','六年'];
-  var cs=gs.map(function(g){ return DB.filter(function(r){ return r.status==='approved'&&r.cls.indexOf(g)===0; }).length; });
+  var gs=['1年級','2年級','3年級','4年級','5年級','6年級'];
+  var cs=gs.map(function(g,i){ return DB.filter(function(r){ return r.status==='approved'&&r.cls.charAt(0)===(i+1).toString(); }).length; });
   var mx=Math.max.apply(null,cs.concat([1])), html='';
   cs.forEach(function(c,i){
     var ht=Math.max(Math.round(c/mx*105),4);
@@ -1405,22 +1409,23 @@ function filterLB() {
 
 /* ──────── ANALYTICS ──────── */
 function loadAna() {
-  var gs=['一年','二年','三年','四年','五年','六年'];
+  var gs=['1年級','2年級','3年級','4年級','5年級','6年級'];
   var clrs=['a-amber','a-green','a-blue','a-red','a-purple','a-amber'];
   var icos=['🥇','🥈','🥉','📚','🌟','🎯'];
   var cHtml='';
   gs.forEach(function(g,i){
-    var all=DB.filter(function(r){ return r.cls.indexOf(g)===0; });
+    var gn=(i+1).toString();
+    var all=DB.filter(function(r){ return r.cls.charAt(0)===gn; });
     var ok=all.filter(function(r){ return r.status==='approved'; });
     var uqSet={}; all.forEach(function(r){ uqSet[r.nm+'_'+r.cls]=1; });
     cHtml+='<div class="scard"><div class="scard-bar '+clrs[i]+'"></div>'
       +'<div class="scard-ico">'+icos[i]+'</div>'
       +'<div class="scard-val">'+ok.length+'</div>'
-      +'<div class="scard-lbl">'+g+'年 通過</div>'
+      +'<div class="scard-lbl">'+g+' 通過</div>'
       +'<div class="muted" style="margin-top:.18rem">'+Object.keys(uqSet).length+' 位學生</div></div>';
   });
   eid('anaCards').innerHTML=cHtml;
-  var cs=gs.map(function(g){ return DB.filter(function(r){ return r.cls.indexOf(g)===0&&r.status==='approved'; }).length; });
+  var cs=gs.map(function(g,i){ return DB.filter(function(r){ return r.cls.charAt(0)===(i+1).toString()&&r.status==='approved'; }).length; });
   var mx=Math.max.apply(null,cs.concat([1])), barHtml='';
   cs.forEach(function(c,i){
     barHtml+='<div class="bar-col"><span class="bar-top g">'+c+'</span>'
@@ -1443,13 +1448,14 @@ function loadAna() {
   });
   eid('anaRevStats').innerHTML=revHtml;
   var tblHtml='';
-  gs.forEach(function(g){
-    var all=DB.filter(function(r){ return r.cls.indexOf(g)===0; });
+  gs.forEach(function(g,i){
+    var gn=(i+1).toString();
+    var all=DB.filter(function(r){ return r.cls.charAt(0)===gn; });
     var p2=all.filter(function(r){ return r.status==='pending'; }).length;
     var a2=all.filter(function(r){ return r.status==='approved'; }).length;
     var r2=all.filter(function(r){ return r.status==='rejected'; }).length;
     var rate=all.length?Math.round(a2/all.length*100):0;
-    tblHtml+='<tr><td><span class="grade-pill">'+g+'年</span></td><td>'+all.length+'</td>'
+    tblHtml+='<tr><td><span class="grade-pill">'+g+'</span></td><td>'+all.length+'</td>'
       +'<td><span class="badge b-pend">'+p2+'</span></td>'
       +'<td><span class="badge b-appr">'+a2+'</span></td>'
       +'<td><span class="badge b-rej">'+r2+'</span></td>'
