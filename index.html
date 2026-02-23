@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>興嘉國小學生閱讀護照</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   ROOT VARIABLES
+══════════════════════════════════════ */
+:root {
+  --bg:#faf7f2; --surface:#fff; --ink:#1c1209; --muted:#8a7a6a;
+  --border:rgba(28,18,9,.1); --border2:rgba(28,18,9,.07);
+  --amber:#d97706; --amber-lt:#fbbf24; --amber-bg:#fffbeb;
+  --green:#15803d; --green-lt:#4ade80; --green-bg:#f0fdf4;
+  --red:#dc2626; --red-bg:#fef2f2;
+  --blue:#1d4ed8; --blue-lt:#60a5fa; --blue-bg:#eff6ff;
+  --purple:#7c3aed; --purple-lt:#a78bfa;
+  --sh-sm:0 1px 3px rgba(28,18,9,.08),0 1px 2px rgba(28,18,9,.06);
+  --sh:0 4px 16px rgba(28,18,9,.10);
+  --sh-lg:0 12px 40px rgba(28,18,9,.15);
+  --r:14px; --r-sm:8px; --r-lg:20px;
+  --nav-h:64px;
+}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box }
+html { scroll-behavior:smooth }
+body { font-family:'Noto Sans TC',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; font-size:15px; line-height:1.6 }
+button,input,select,textarea { font-family:inherit }
+body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:radial-gradient(circle at 15% 15%,rgba(217,119,6,.05) 0%,transparent 45%),
+                   radial-gradient(circle at 85% 85%,rgba(21,128,61,.04) 0%,transparent 45%) }
+
+/* ══════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════ */
+.topbar { position:sticky; top:0; z-index:100; height:var(--nav-h);
+  background:rgba(20,12,4,.96); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.06); display:flex; align-items:center }
+.topbar-inner { width:100%; max-width:1280px; margin:0 auto; padding:0 1.5rem;
+  display:flex; align-items:center; gap:1.2rem }
+.brand { display:flex; align-items:center; gap:.65rem; text-decoration:none; flex-shrink:0 }
+.brand-gem { width:38px; height:38px; border-radius:10px;
+  background:linear-gradient(135deg,var(--amber-lt),var(--amber));
+  display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+  box-shadow:0 0 0 3px rgba(251,191,36,.25) }
+.brand-text strong { display:block; font-family:'Noto Serif TC',serif;
+  font-size:.92rem; font-weight:900; color:#fff; letter-spacing:.04em }
+.brand-text span { font-size:.62rem; color:rgba(255,255,255,.38); letter-spacing:.12em }
+.main-nav { display:flex; align-items:center; gap:.15rem; flex:1 }
+.nav-btn { background:none; border:none; color:rgba(255,255,255,.5);
+  padding:.42rem .8rem; border-radius:var(--r-sm);
+  font-size:.8rem; font-weight:500; cursor:pointer; transition:all .2s;
+  white-space:nowrap; letter-spacing:.02em }
+.nav-btn:hover { background:rgba(255,255,255,.09); color:#fff }
+.nav-btn.active { background:rgba(217,119,6,.22); color:var(--amber-lt); font-weight:700 }
+.nav-btn.adm { color:var(--purple-lt) }
+.nav-btn.adm.active { background:rgba(124,58,237,.25); color:#c4b5fd }
+.topbar-space { flex:1 }
+.topbar-right { display:flex; align-items:center; gap:.55rem; flex-shrink:0 }
+.btn-enter { background:linear-gradient(135deg,var(--amber-lt),var(--amber)); border:none;
+  color:#fff; font-weight:700; font-size:.8rem; padding:.4rem 1rem;
+  border-radius:var(--r-sm); cursor:pointer; transition:all .2s }
+.btn-enter:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(217,119,6,.4) }
+.user-chip { display:flex; align-items:center; gap:.45rem }
+.user-av { width:30px; height:30px; border-radius:50%;
+  background:linear-gradient(135deg,var(--amber-lt),var(--amber));
+  display:flex; align-items:center; justify-content:center;
+  font-size:.78rem; font-weight:900; color:#fff }
+.user-nm { font-size:.78rem; color:rgba(255,255,255,.75); font-weight:600 }
+.btn-logout { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.5); font-size:.72rem; padding:.26rem .65rem;
+  border-radius:var(--r-sm); cursor:pointer; transition:all .2s }
+.btn-logout:hover { background:rgba(220,38,38,.25); color:#fca5a5; border-color:rgba(220,38,38,.3) }
+
+/* ══════════════════════════════════════
+   HAMBURGER & DRAWER
+══════════════════════════════════════ */
+.hbg { display:none; flex-direction:column; gap:5px; background:none; border:none;
+  cursor:pointer; padding:.45rem; margin-left:.2rem }
+.hbg span { display:block; width:22px; height:2px; background:rgba(255,255,255,.7);
+  border-radius:2px; transition:all .3s }
+.hbg.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px) }
+.hbg.open span:nth-child(2) { opacity:0 }
+.hbg.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px) }
+.drawer { position:fixed; top:var(--nav-h); left:0; right:0; z-index:99;
+  background:rgba(20,12,4,.97); backdrop-filter:blur(14px);
+  display:flex; flex-direction:column; padding:.7rem;
+  transform:translateY(-110%); transition:transform .3s cubic-bezier(.4,0,.2,1);
+  border-bottom:1px solid rgba(255,255,255,.06) }
+.drawer.open { transform:translateY(0) }
+.dr-btn { background:none; border:none; color:rgba(255,255,255,.65);
+  padding:.7rem 1rem; text-align:left; font-size:.88rem; font-weight:600;
+  cursor:pointer; border-radius:var(--r-sm); transition:all .2s }
+.dr-btn:hover { background:rgba(255,255,255,.09); color:#fff }
+.dr-btn.active { background:rgba(217,119,6,.2); color:var(--amber-lt) }
+.dr-btn.adm { color:var(--purple-lt) }
+.dr-div { height:1px; background:rgba(255,255,255,.07); margin:.45rem 0 }
+.dr-user { display:flex; align-items:center; justify-content:space-between;
+  padding:.6rem 1rem; color:rgba(255,255,255,.7) }
+.dr-user-info span { display:block; font-weight:700; font-size:.9rem }
+.dr-user-info small { font-size:.72rem; color:rgba(255,255,255,.38) }
+
+/* ══════════════════════════════════════
+   LOGIN PAGES
+══════════════════════════════════════ */
+.login-pg { position:fixed; inset:0; z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  padding:1.5rem; opacity:0; pointer-events:none; transition:opacity .3s }
+.login-pg.vis { opacity:1; pointer-events:all }
+.login-pg::before { content:''; position:absolute; inset:0;
+  background:rgba(10,6,2,.85); backdrop-filter:blur(8px) }
+.adm-pg::before { background:rgba(20,10,40,.88) }
+.login-card { position:relative; width:100%; max-width:420px;
+  background:var(--surface); border-radius:var(--r-lg); overflow:hidden;
+  box-shadow:var(--sh-lg); animation:popIn .35s cubic-bezier(.34,1.56,.64,1) }
+@keyframes popIn { from { opacity:0; transform:scale(.88) translateY(20px) } to { opacity:1; transform:none } }
+.lh { padding:2rem 2rem 1.5rem; position:relative }
+.lh-student { background:linear-gradient(135deg,#78350f,#d97706,#fbbf24) }
+.lh-admin   { background:linear-gradient(135deg,#2e1065,#7c3aed,#a78bfa) }
+.lh-back { position:absolute; top:1rem; left:1rem; background:rgba(255,255,255,.2);
+  border:none; color:#fff; width:30px; height:30px; border-radius:50%;
+  font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:background .2s }
+.lh-back:hover { background:rgba(255,255,255,.35) }
+.lh-icon { font-size:2.2rem; margin-bottom:.6rem }
+.lh-title { font-family:'Noto Serif TC',serif; font-size:1.4rem; font-weight:900; color:#fff }
+.lh-sub { font-size:.8rem; color:rgba(255,255,255,.7); margin-top:.25rem }
+.lb { padding:1.5rem 1.8rem 2rem }
+.adm-form { padding-top:1.6rem }
+.f-grp { margin-bottom:1rem }
+.f-grp label { display:block; font-size:.8rem; font-weight:700; margin-bottom:.4rem; color:var(--ink) }
+.req { color:var(--red); margin-left:2px }
+.f-wrap { position:relative }
+.f-ico { position:absolute; left:.75rem; top:50%; transform:translateY(-50%); font-size:.95rem; z-index:1 }
+.f-in { width:100%; padding:.7rem 1rem .7rem 2.5rem; border:2px solid var(--border);
+  border-radius:var(--r-sm); font-size:.9rem; background:var(--bg); color:var(--ink);
+  transition:border-color .2s; outline:none }
+.f-in:focus { border-color:var(--amber) }
+.adm-form .f-in:focus { border-color:var(--purple) }
+.login-btn { width:100%; padding:.85rem; border:none; border-radius:var(--r-sm);
+  font-size:.95rem; font-weight:700; cursor:pointer; transition:all .25s; margin-top:.5rem }
+.lb-student { background:linear-gradient(135deg,var(--amber),var(--amber-lt)); color:#fff }
+.lb-student:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(217,119,6,.45) }
+.lb-admin   { background:linear-gradient(135deg,var(--purple),var(--purple-lt)); color:#fff }
+.lb-admin:hover   { transform:translateY(-2px); box-shadow:0 6px 20px rgba(124,58,237,.45) }
+.l-switch { text-align:center; font-size:.78rem; color:var(--muted); margin-top:1rem }
+.l-switch a { color:var(--amber); cursor:pointer; font-weight:700 }
+.adm-form .l-switch a { color:var(--purple) }
+
+/* ══════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════ */
+main.wrap { max-width:1280px; margin:0 auto; padding:2rem 1.5rem; position:relative; z-index:1 }
+.page { display:none }
+.page.active { display:block; animation:fadeUp .25s ease }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px) } to { opacity:1; transform:none } }
+.pg-title { font-family:'Noto Serif TC',serif; font-size:1.5rem; font-weight:900; margin-bottom:.28rem }
+.pg-sub { color:var(--muted); font-size:.85rem; margin-bottom:1.5rem }
+
+/* ══════════════════════════════════════
+   CARDS & SECTIONS
+══════════════════════════════════════ */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
+  padding:1.4rem; box-shadow:var(--sh-sm) }
+.card-title { font-family:'Noto Serif TC',serif; font-weight:700; font-size:1rem;
+  margin-bottom:.95rem; display:flex; align-items:center; gap:.38rem }
+.mt1 { margin-top:.6rem }
+.mt2 { margin-top:1.2rem }
+.muted { color:var(--muted); font-size:.78rem }
+
+/* STAT CARDS */
+.stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(158px,1fr)); gap:.75rem; margin-bottom:1.4rem }
+.scard { background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
+  padding:1.1rem 1rem; position:relative; overflow:hidden; transition:box-shadow .2s,transform .2s }
+.scard:hover { transform:translateY(-2px); box-shadow:var(--sh) }
+.scard-bar { position:absolute; top:0; left:0; right:0; height:3px; border-radius:0 }
+.a-amber { background:linear-gradient(90deg,var(--amber-lt),var(--amber)) }
+.a-green  { background:linear-gradient(90deg,var(--green-lt),var(--green)) }
+.a-blue   { background:linear-gradient(90deg,var(--blue-lt),var(--blue)) }
+.a-red    { background:linear-gradient(90deg,#f87171,var(--red)) }
+.a-purple { background:linear-gradient(90deg,var(--purple-lt),var(--purple)) }
+.scard-ico { font-size:1.6rem; margin-bottom:.38rem }
+.scard-val { font-family:'Noto Serif TC',serif; font-size:2rem; font-weight:900; line-height:1; margin-bottom:.2rem }
+.scard-lbl { font-size:.72rem; color:var(--muted); font-weight:500 }
+
+/* DASH GRID */
+.dash-grid { display:grid; grid-template-columns:1fr 1fr; gap:.85rem }
+
+/* SEARCH ROW */
+.search-row { display:flex; gap:.55rem; margin-bottom:.85rem; flex-wrap:wrap }
+
+/* FORMS */
+.fg { display:flex; flex-direction:column; gap:.35rem }
+.fg label { font-size:.8rem; font-weight:700; color:var(--ink) }
+.fi { padding:.62rem .85rem; border:1.5px solid var(--border); border-radius:var(--r-sm);
+  font-size:.88rem; background:var(--bg); color:var(--ink); outline:none; transition:border-color .2s; width:100% }
+.fi:focus { border-color:var(--amber); background:var(--surface) }
+.ft { padding:.75rem .9rem; border:1.5px solid var(--border); border-radius:var(--r-sm);
+  font-size:.88rem; background:var(--bg); color:var(--ink); outline:none; transition:border-color .2s;
+  resize:vertical; width:100%; line-height:1.75 }
+.ft:focus { border-color:var(--amber); background:var(--surface) }
+.fs { padding:.58rem .8rem; border:1.5px solid var(--border); border-radius:var(--r-sm);
+  font-size:.85rem; background:var(--bg); color:var(--ink); outline:none; cursor:pointer; width:100% }
+.fg-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem }
+.fg-grid .full { grid-column:1 / -1 }
+
+/* SECTION BOXES */
+.sbox { border:1.5px solid var(--border); border-radius:var(--r); padding:1rem 1.1rem; margin-bottom:.75rem }
+.sbox-t { font-weight:700; font-size:.85rem; margin-bottom:.65rem }
+.st-amber { border-color:rgba(217,119,6,.22); background:rgba(255,251,235,.4) }
+.st-amber .sbox-t { color:var(--amber) }
+.st-blue  { border-color:rgba(29,78,216,.18); background:rgba(239,246,255,.4) }
+.st-blue  .sbox-t  { color:var(--blue) }
+.st-green { border-color:rgba(21,128,61,.18); background:rgba(240,253,244,.4) }
+.st-green .sbox-t { color:var(--green) }
+
+/* CHAR COUNTER */
+.char-row { display:flex; align-items:center; gap:.65rem; margin-top:.55rem; flex-wrap:wrap }
+.char-bar-w { flex:1; height:5px; background:rgba(28,18,9,.08); border-radius:3px; overflow:hidden; min-width:80px }
+.char-bar-f { height:100%; border-radius:3px; transition:width .2s,background .3s }
+.char-cnt { font-size:.75rem; font-weight:700; min-width:38px }
+.char-warn { font-size:.72rem; color:var(--red); font-weight:600 }
+
+/* ══════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════ */
+.btn { display:inline-flex; align-items:center; gap:.35rem; padding:.52rem 1.1rem;
+  border:none; border-radius:var(--r-sm); font-size:.83rem; font-weight:700;
+  cursor:pointer; transition:all .2s; text-decoration:none }
+.btn-primary { background:var(--amber); color:#fff }
+.btn-primary:hover { background:#b45309; transform:translateY(-1px) }
+.btn-ok      { background:var(--green); color:#fff }
+.btn-ok:hover { background:#166534; transform:translateY(-1px) }
+.btn-danger  { background:var(--red); color:#fff }
+.btn-danger:hover { background:#b91c1c; transform:translateY(-1px) }
+.btn-blue    { background:var(--blue); color:#fff }
+.btn-blue:hover { background:#1e40af; transform:translateY(-1px) }
+.btn-ghost   { background:rgba(28,18,9,.06); color:var(--ink); border:1.5px solid var(--border) }
+.btn-ghost:hover { background:rgba(28,18,9,.11) }
+.btn-sm  { padding:.36rem .72rem; font-size:.74rem }
+.btn-xs  { padding:.22rem .5rem; font-size:.69rem }
+.btn-row { display:flex; gap:.55rem; justify-content:flex-end; margin-top:1rem; flex-wrap:wrap }
+.btn-row-s { justify-content:flex-start }
+
+/* ══════════════════════════════════════
+   BADGES
+══════════════════════════════════════ */
+.badge { display:inline-flex; align-items:center; gap:.22rem; padding:.17rem .58rem;
+  border-radius:20px; font-size:.69rem; font-weight:700; letter-spacing:.03em }
+.b-dot { width:5px; height:5px; border-radius:50%; background:currentColor }
+.b-pend { background:rgba(217,119,6,.12); color:#92400e }
+.b-appr { background:rgba(21,128,61,.12); color:var(--green) }
+.b-rej  { background:rgba(220,38,38,.12); color:var(--red) }
+.grade-pill { display:inline-block; font-size:.72rem; font-weight:700;
+  padding:.1rem .5rem; border-radius:6px; background:var(--amber-bg); color:var(--amber) }
+
+/* ══════════════════════════════════════
+   TABLE
+══════════════════════════════════════ */
+.tbl-wrap { overflow-x:auto; border-radius:var(--r-sm); border:1px solid var(--border) }
+table { width:100%; border-collapse:collapse; font-size:.82rem }
+thead th { background:rgba(28,18,9,.04); font-weight:700; font-size:.72rem;
+  letter-spacing:.04em; color:var(--muted); padding:.68rem .88rem; text-align:left;
+  border-bottom:1px solid var(--border); white-space:nowrap }
+tbody td { padding:.62rem .88rem; border-bottom:1px solid var(--border2); vertical-align:middle }
+tbody tr:last-child td { border-bottom:none }
+tbody tr:hover td { background:rgba(217,119,6,.03) }
+
+/* ══════════════════════════════════════
+   TABS
+══════════════════════════════════════ */
+.tabs { display:flex; gap:.18rem; border-bottom:2px solid var(--border); margin-bottom:1.15rem }
+.tab-btn { background:none; border:none; padding:.52rem .95rem; font-size:.81rem; font-weight:600;
+  cursor:pointer; color:var(--muted); border-bottom:2px solid transparent;
+  margin-bottom:-2px; transition:all .2s }
+.tab-btn:hover { color:var(--ink) }
+.tab-btn.active { color:var(--amber); border-bottom-color:var(--amber) }
+.tab-pane { display:none }
+.tab-pane.active { display:block; animation:fadeUp .2s ease }
+
+/* ══════════════════════════════════════
+   REVIEW ITEMS
+══════════════════════════════════════ */
+.ri { display:flex; gap:.95rem; padding:.95rem; border:1px solid var(--border);
+  border-radius:var(--r-sm); background:var(--surface); transition:box-shadow .2s; margin-bottom:.65rem }
+.ri:hover { box-shadow:var(--sh) }
+.ri-cover { width:45px; height:60px; border-radius:6px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:1.35rem }
+.ri-body { flex:1; min-width:0 }
+.ri-title { font-weight:700; font-size:.88rem; margin-bottom:.18rem }
+.ri-by { font-size:.72rem; color:var(--muted); margin-bottom:.38rem }
+.ri-tags { display:flex; gap:.35rem; flex-wrap:wrap }
+.ri-tag { font-size:.68rem; background:rgba(28,18,9,.06); padding:.13rem .5rem; border-radius:4px; color:var(--muted) }
+.ri-exc { font-size:.78rem; color:var(--ink); margin-top:.4rem; line-height:1.7;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
+.ri-acts { display:flex; flex-direction:column; gap:.3rem; flex-shrink:0 }
+
+/* ══════════════════════════════════════
+   PASSPORT HERO
+══════════════════════════════════════ */
+.ph { background:linear-gradient(135deg,#1c1209 0%,#3d2a0f 45%,#162b1c 100%);
+  border-radius:var(--r-lg); padding:1.8rem 2rem; color:#fff; position:relative; overflow:hidden }
+.ph-wm { position:absolute; right:-10px; bottom:-20px; font-size:6rem; font-weight:900;
+  opacity:.04; letter-spacing:-.05em; user-select:none; white-space:nowrap; line-height:1 }
+.ph-lbl { font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; opacity:.4; margin-bottom:.4rem }
+.ph-name { font-family:'Noto Serif TC',serif; font-size:1.65rem; font-weight:900; margin-bottom:.08rem }
+.ph-cls  { font-size:.82rem; opacity:.55; margin-bottom:1.2rem }
+.ph-stats { display:flex; gap:2rem }
+.ph-val  { font-family:'Noto Serif TC',serif; font-size:1.75rem; font-weight:900; color:var(--amber-lt); line-height:1 }
+.ph-lbl2 { font-size:.65rem; opacity:.45; margin-top:.15rem }
+
+/* ══════════════════════════════════════
+   LEADERBOARD
+══════════════════════════════════════ */
+.lb-list { list-style:none }
+.lb-item { display:flex; align-items:center; gap:.75rem; padding:.65rem 0; border-bottom:1px solid var(--border2) }
+.lb-item:last-child { border-bottom:none }
+.rank { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:.8rem; flex-shrink:0 }
+.r1 { background:linear-gradient(135deg,#fde68a,#f59e0b); color:#78350f }
+.r2 { background:linear-gradient(135deg,#e2e8f0,#94a3b8); color:#374151 }
+.r3 { background:linear-gradient(135deg,#fcd9b0,#cd7c2a); color:#7c3a00 }
+.rn { background:rgba(28,18,9,.06); color:var(--muted) }
+.lb-info { flex:1; min-width:0 }
+.lb-name { font-weight:700; font-size:.88rem }
+.lb-meta { font-size:.7rem; color:var(--muted) }
+.lb-bar-w { width:90px; height:6px; background:rgba(28,18,9,.07); border-radius:3px; overflow:hidden }
+.lb-bar-f { height:100%; background:linear-gradient(90deg,var(--amber-lt),var(--amber)); border-radius:3px; transition:width .8s cubic-bezier(.34,1.56,.64,1) }
+.lb-cnt { font-size:.78rem; font-weight:700; color:var(--amber); min-width:40px; text-align:right }
+
+/* ══════════════════════════════════════
+   BAR CHART
+══════════════════════════════════════ */
+.bar-chart { display:flex; align-items:flex-end; gap:.6rem; height:130px; padding:.5rem 0 0 }
+.bar-col { display:flex; flex-direction:column; align-items:center; gap:.28rem; flex:1 }
+.bar-top { font-size:.72rem; font-weight:700; color:var(--ink) }
+.bar-top.g { color:var(--green) }
+.bar-body { width:100%; border-radius:4px 4px 0 0; background:linear-gradient(180deg,var(--amber-lt),var(--amber));
+  transition:height .85s cubic-bezier(.34,1.56,.64,1) }
+.bar-body.g { background:linear-gradient(180deg,var(--green-lt),var(--green)) }
+.bar-lbl { font-size:.65rem; color:var(--muted); white-space:nowrap }
+
+/* ══════════════════════════════════════
+   PROGRESS BARS
+══════════════════════════════════════ */
+.prog-w { flex:1; height:6px; background:rgba(28,18,9,.07); border-radius:3px; overflow:hidden }
+.prog-f { height:100%; background:linear-gradient(90deg,var(--green-lt),var(--green)); border-radius:3px; transition:width .6s }
+
+/* ══════════════════════════════════════
+   OVERLAYS & MODALS
+══════════════════════════════════════ */
+.overlay { position:fixed; inset:0; z-index:300; background:rgba(10,6,2,.65);
+  backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center;
+  padding:1rem; opacity:0; pointer-events:none; transition:opacity .25s }
+.overlay.open { opacity:1; pointer-events:all }
+.modal { background:var(--surface); border-radius:var(--r-lg); padding:1.8rem;
+  max-width:540px; width:100%; max-height:90vh; overflow-y:auto;
+  box-shadow:var(--sh-lg); animation:popIn .3s cubic-bezier(.34,1.56,.64,1) }
+.modal-title { font-family:'Noto Serif TC',serif; font-weight:700; font-size:1.05rem;
+  margin-bottom:1.1rem; padding-bottom:.75rem; border-bottom:1px solid var(--border) }
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+.toast-w { position:fixed; bottom:1.5rem; right:1.5rem; z-index:400;
+  display:flex; flex-direction:column; gap:.45rem; pointer-events:none }
+.toast { padding:.65rem 1.1rem; border-radius:var(--r-sm); font-size:.83rem; font-weight:600;
+  color:#fff; box-shadow:var(--sh-lg); animation:toastIn .3s ease;
+  max-width:280px; line-height:1.4 }
+@keyframes toastIn { from { transform:translateX(120%); opacity:0 } to { transform:none; opacity:1 } }
+.t-default { background:#1c1209 }
+.t-err  { background:var(--red) }
+.t-ok   { background:var(--green) }
+
+/* ══════════════════════════════════════
+   LOADING / EMPTY
+══════════════════════════════════════ */
+.loading { display:flex; align-items:center; gap:.55rem; color:var(--muted); padding:1.2rem 0; font-size:.82rem }
+.spin { display:inline-block; width:16px; height:16px; border:2px solid var(--border);
+  border-top-color:var(--amber); border-radius:50%; animation:spin .7s linear infinite }
+@keyframes spin { to { transform:rotate(360deg) } }
+.empty { text-align:center; padding:2.5rem 1rem; color:var(--muted) }
+.empty-ico { font-size:2.5rem; margin-bottom:.65rem }
+
+/* ══════════════════════════════════════
+   CATERPILLAR / METAMORPHOSIS
+══════════════════════════════════════ */
+.cater-hero { background:linear-gradient(135deg,#052e16 0%,#14532d 40%,#1a3a0a 100%);
+  border-radius:var(--r-lg); padding:1.8rem 2rem; color:#fff; position:relative;
+  overflow:hidden; margin-bottom:1.3rem; box-shadow:0 16px 48px rgba(5,46,22,.35) }
+.cater-hero::before { content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle at 80% 20%,rgba(134,239,172,.09) 0%,transparent 50%),
+                   radial-gradient(circle at 20% 80%,rgba(74,222,128,.06) 0%,transparent 40%) }
+.cater-deco { position:absolute; right:-10px; bottom:-20px; font-size:8rem; opacity:.07;
+  transform:rotate(-15deg); pointer-events:none; line-height:1 }
+.ch-label { font-size:.65rem; letter-spacing:.18em; opacity:.45; margin-bottom:.25rem; text-transform:uppercase }
+.ch-title { font-family:'Noto Serif TC',serif; font-size:1.5rem; font-weight:900; margin-bottom:.12rem }
+.ch-sub { font-size:.77rem; opacity:.5; margin-bottom:1.4rem }
+.ch-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem }
+.ch-val { font-family:'Noto Serif TC',serif; font-size:1.9rem; font-weight:900; color:#86efac; line-height:1 }
+.ch-lbl { font-size:.65rem; opacity:.5; margin-top:.18rem }
+
+.stage-row { display:grid; grid-template-columns:repeat(4,1fr); gap:.7rem; margin-bottom:1.3rem }
+.stage-card { background:var(--surface); border:2px solid var(--border); border-radius:var(--r);
+  padding:1rem .85rem; text-align:center; cursor:default; transition:all .3s; position:relative; overflow:hidden }
+.stage-card.current { border-color:var(--sc, var(--amber)); background:rgba(0,0,0,.03);
+  box-shadow:0 0 0 4px rgba(0,0,0,.06), var(--sh);
+  animation:sPulse 2.5s ease-in-out infinite }
+@keyframes sPulse {
+  0%,100% { box-shadow:0 0 0 4px rgba(0,0,0,.06), var(--sh) }
+  50%      { box-shadow:0 0 0 9px rgba(0,0,0,.03), var(--sh-lg) }
+}
+.stage-card.completed { border-color:#16a34a; background:#f0fdf4 }
+.stage-card.locked { opacity:.4 }
+.s-ico { font-size:2rem; margin-bottom:.4rem }
+.s-name { font-weight:700; font-size:.8rem; color:var(--ink); margin-bottom:.18rem }
+.s-range { font-size:.67rem; color:var(--muted); margin-bottom:.5rem }
+.s-desc { font-size:.68rem; color:var(--muted); line-height:1.5; margin-bottom:.55rem }
+.s-pw { height:5px; background:rgba(28,18,9,.08); border-radius:3px; overflow:hidden }
+.s-pf { height:100%; border-radius:3px; transition:width 1s cubic-bezier(.34,1.56,.64,1) }
+.s-done { position:absolute; top:.45rem; right:.45rem; background:#16a34a; color:#fff;
+  font-size:.58rem; font-weight:700; padding:.08rem .35rem; border-radius:8px }
+.s-cur-tag { position:absolute; top:.45rem; left:.45rem; font-size:.58rem; font-weight:700;
+  padding:.08rem .35rem; border-radius:8px; color:#fff }
+
+.ci-form { background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
+  padding:1.4rem; margin-bottom:1.3rem; box-shadow:var(--sh-sm) }
+.ci-title { font-family:'Noto Serif TC',serif; font-size:1rem; font-weight:900;
+  margin-bottom:.95rem; display:flex; align-items:center; gap:.4rem }
+
+.rl { display:flex; flex-direction:column; gap:.55rem }
+.ritem { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-sm);
+  padding:.85rem 1rem; display:flex; gap:.75rem; align-items:flex-start; transition:box-shadow .2s }
+.ritem:hover { box-shadow:var(--sh) }
+.rnum { width:30px; height:30px; border-radius:50%; flex-shrink:0; display:flex;
+  align-items:center; justify-content:center; font-weight:900; font-size:.75rem; color:#fff;
+  background:linear-gradient(135deg,#16a34a,#14532d) }
+.rbody { flex:1; min-width:0 }
+.rtitle { font-weight:700; font-size:.87rem }
+.rmeta { font-size:.7rem; color:var(--muted); margin-top:.1rem }
+.rthought { font-size:.79rem; color:var(--ink); margin-top:.28rem; line-height:1.65;
+  background:rgba(21,128,61,.05); border-left:3px solid #16a34a;
+  padding:.3rem .6rem; border-radius:0 4px 4px 0 }
+.rdel { background:none; border:none; color:rgba(220,38,38,.4); cursor:pointer;
+  font-size:.73rem; padding:.22rem .42rem; border-radius:5px; transition:all .2s; flex-shrink:0; margin-top:.08rem }
+.rdel:hover { background:var(--red-bg); color:var(--red) }
+.r-stag { font-size:.63rem; font-weight:700; padding:.08rem .38rem; border-radius:8px;
+  display:inline-block; margin-left:.35rem }
+
+.cert-wrap { background:linear-gradient(135deg,#052e16,#14532d,#065f46);
+  border-radius:var(--r-lg); padding:2.5rem 2rem; text-align:center; color:#fff;
+  box-shadow:0 20px 60px rgba(5,46,22,.5); position:relative; overflow:hidden; margin-bottom:1.3rem }
+.cert-wrap::before { content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:radial-gradient(circle at 20% 20%,rgba(252,211,77,.14) 0%,transparent 40%),
+                   radial-gradient(circle at 80% 80%,rgba(134,239,172,.1) 0%,transparent 40%) }
+.cert-stars { font-size:1.4rem; letter-spacing:.2em; margin-bottom:.75rem }
+.cert-ico { font-size:4rem; margin-bottom:.55rem; filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));
+  animation:cFloat 3s ease-in-out infinite }
+@keyframes cFloat { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-8px) } }
+.cert-h { font-family:'Noto Serif TC',serif; font-size:1.7rem; font-weight:900;
+  margin-bottom:.35rem; text-shadow:0 2px 8px rgba(0,0,0,.3) }
+.cert-nm { font-size:1.1rem; color:#fde68a; font-weight:700; margin-bottom:.35rem }
+.cert-txt { font-size:.83rem; opacity:.7; line-height:1.7; max-width:380px; margin:0 auto 1.1rem }
+.cert-seal { display:inline-flex; align-items:center; justify-content:center;
+  width:68px; height:68px; border-radius:50%; border:3px solid rgba(252,211,77,.6);
+  color:#fde68a; font-size:.68rem; font-weight:700; letter-spacing:.04em; line-height:1.3;
+  box-shadow:0 0 20px rgba(252,211,77,.25) }
+
+.lookup-card { background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r); padding:1.4rem; box-shadow:var(--sh-sm); margin-bottom:1.3rem }
+.lookup-res { margin-top:.9rem; padding:.95rem; background:#f0fdf4;
+  border:1px solid #bbf7d0; border-radius:var(--r-sm); display:none }
+.lookup-res.show { display:block }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:900px) {
+  .main-nav { display:none }
+  .hbg { display:flex }
+  .topbar-right .user-chip { display:none }
+}
+@media(max-width:768px) {
+  :root { --nav-h:58px }
+  main.wrap { padding:1.2rem 1rem }
+  .pg-title { font-size:1.3rem }
+  .stats-row { grid-template-columns:repeat(2,1fr); gap:.65rem }
+  .dash-grid { grid-template-columns:1fr }
+  .ph { padding:1.4rem }
+  .ph-name { font-size:1.25rem }
+  .btn-enter { padding:.36rem .8rem; font-size:.76rem }
+  .stage-row { grid-template-columns:repeat(2,1fr) }
+}
+@media(max-width:520px) {
+  .ri { flex-wrap:wrap }
+  .ri-acts { flex-direction:row; flex-wrap:wrap; width:100%; margin-top:.3rem }
+  .login-pg { padding:1rem .8rem }
+  .lh { padding:1.5rem 1.4rem 1.2rem }
+  .lb { padding:1.3rem 1.3rem 1.6rem }
+  .stats-row { grid-template-columns:1fr 1fr }
+  .scard-val { font-size:1.6rem }
+  .fg-grid { grid-template-columns:1fr }
+  .fg-grid .full { grid-column:1 }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     TOPBAR
+══════════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#" onclick="showPage('home');return false">
+      <div class="brand-gem">📚</div>
+      <div class="brand-text"><strong>興嘉國小閱讀護照</strong><span>XINGJIA ELEMENTARY SCHOOL READING PASSPORT</span></div>
+    </a>
+    <nav class="main-nav">
+      <button class="nav-btn active" onclick="showPage('home')">🏠 首頁</button>
+      <button class="nav-btn" onclick="showPage('submit')">✍️ 提交心得</button>
+      <button class="nav-btn" onclick="showPage('passport')">🎫 我的護照</button>
+      <button class="nav-btn" onclick="showPage('leaderboard')">🏆 排行榜</button>
+      <button class="nav-btn" onclick="showPage('analytics')">📊 年級分析</button>
+      <button class="nav-btn" onclick="showPage('caterpillar')" style="color:#86efac">🦋 閱讀蛻變</button>
+      <button class="nav-btn adm" id="navAdm" onclick="showPage('admin')" style="display:none">⚙️ 管理後台</button>
+    </nav>
+    <div class="topbar-space"></div>
+    <div class="topbar-right" id="topbarRight">
+      <button class="btn-enter" onclick="goLogin('student')">登入</button>
+    </div>
+    <button class="hbg" id="hbg" onclick="toggleDrawer()" aria-label="選單">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<nav class="drawer" id="drawer">
+  <button class="dr-btn active" onclick="goDrPage('home')">🏠 首頁</button>
+  <button class="dr-btn" onclick="goDrPage('submit')">✍️ 提交心得</button>
+  <button class="dr-btn" onclick="goDrPage('passport')">🎫 我的護照</button>
+  <button class="dr-btn" onclick="goDrPage('leaderboard')">🏆 排行榜</button>
+  <button class="dr-btn" onclick="goDrPage('analytics')">📊 年級分析</button>
+  <button class="dr-btn" onclick="goDrPage('caterpillar')" style="color:#86efac">🦋 閱讀蛻變</button>
+  <button class="dr-btn adm" id="drAdm" onclick="goDrPage('admin')" style="display:none">⚙️ 管理後台</button>
+  <div class="dr-div"></div>
+  <div id="drawerUserArea">
+    <button class="dr-btn" onclick="goLogin('student');closeDrawer()" style="color:var(--amber-lt)">📖 學生登入</button>
+    <button class="dr-btn" onclick="goLogin('admin');closeDrawer()" style="color:var(--purple-lt)">🔑 管理者登入</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     LOGIN: STUDENT
+══════════════════════════════════════ -->
+<div class="login-pg" id="loginStudent">
+  <div class="login-card">
+    <div class="lh lh-student">
+      <button class="lh-back" onclick="goBack()">←</button>
+      <div class="lh-icon">📖</div>
+      <h1 class="lh-title">學生登入</h1>
+      <p class="lh-sub">輸入班級與姓名即可開始使用</p>
+    </div>
+    <div class="lb">
+      <div class="f-grp">
+        <label>班級<span class="req">*</span></label>
+        <div class="f-wrap">
+          <span class="f-ico">🏫</span>
+          <input class="f-in" type="text" id="s-cls" placeholder="例：五年甲班" autocomplete="off">
+        </div>
+      </div>
+      <div class="f-grp">
+        <label>姓名<span class="req">*</span></label>
+        <div class="f-wrap">
+          <span class="f-ico">👤</span>
+          <input class="f-in" type="text" id="s-nm" placeholder="請輸入真實姓名" autocomplete="off"
+            onkeydown="if(event.key==='Enter')doStudentLogin()">
+        </div>
+      </div>
+      <button class="login-btn lb-student" onclick="doStudentLogin()">📚 登入開始閱讀</button>
+      <p class="l-switch">是管理者？<a onclick="goLogin('admin')">切換管理者登入</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     LOGIN: ADMIN
+══════════════════════════════════════ -->
+<div class="login-pg adm-pg" id="loginAdmin">
+  <div class="login-card">
+    <div class="lh lh-admin">
+      <button class="lh-back" onclick="goBack()">←</button>
+      <div class="lh-icon">🔑</div>
+      <h1 class="lh-title">管理者登入</h1>
+      <p class="lh-sub">輸入管理者密碼以進入後台</p>
+    </div>
+    <div class="lb adm-form">
+      <div class="f-grp">
+        <label>管理者密碼<span class="req">*</span></label>
+        <div class="f-wrap">
+          <span class="f-ico">🔒</span>
+          <input class="f-in" type="password" id="a-pw" placeholder="請輸入管理者密碼"
+            onkeydown="if(event.key==='Enter')doAdminLogin()">
+        </div>
+      </div>
+      <button class="login-btn lb-admin" onclick="doAdminLogin()">⚙️ 進入管理後台</button>
+      <p class="l-switch">是學生？<a onclick="goLogin('student')">切換學生登入</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN PAGES
+══════════════════════════════════════ -->
+<main class="wrap">
+
+<!-- ── HOME ── -->
+<div class="page active" id="page-home">
+  <div id="homeBanner" style="display:none;margin-bottom:1.3rem">
+    <div class="ph">
+      <div class="ph-wm">XINGJIA READING PASSPORT</div>
+      <div class="ph-lbl">📚 興嘉國小學生閱讀護照</div>
+      <div class="ph-name" id="hName">－</div>
+      <div class="ph-cls"  id="hCls">－</div>
+      <div class="ph-stats">
+        <div><div class="ph-val" id="hBooks">0</div><div class="ph-lbl2">通過冊數</div></div>
+        <div><div class="ph-val" id="hPend">0</div><div class="ph-lbl2">待審核</div></div>
+        <div><div class="ph-val" id="hTotal">0</div><div class="ph-lbl2">心得篇數</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="scard"><div class="scard-bar a-amber"></div><div class="scard-ico">📖</div><div class="scard-val" id="st-books">-</div><div class="scard-lbl">全校閱讀總冊數</div></div>
+    <div class="scard"><div class="scard-bar a-green"></div><div class="scard-ico">✍️</div><div class="scard-val" id="st-reviews">-</div><div class="scard-lbl">心得總篇數</div></div>
+    <div class="scard"><div class="scard-bar a-blue"></div><div class="scard-ico">👥</div><div class="scard-val" id="st-students">-</div><div class="scard-lbl">參與學生數</div></div>
+    <div class="scard"><div class="scard-bar a-purple"></div><div class="scard-ico">✅</div><div class="scard-val" id="st-approved">-</div><div class="scard-lbl">已審核通過</div></div>
+    <div class="scard"><div class="scard-bar a-red"></div><div class="scard-ico">⏳</div><div class="scard-val" id="st-pending">-</div><div class="scard-lbl">待審核心得</div></div>
+  </div>
+  <div class="dash-grid">
+    <div class="card">
+      <div class="card-title">🏆 閱讀排行 Top 5</div>
+      <ul class="lb-list" id="homeLB"><li class="loading"><span class="spin"></span>載入中…</li></ul>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 各年級閱讀量</div>
+      <div class="bar-chart" id="homeChart"><div class="loading"><span class="spin"></span></div></div>
+    </div>
+  </div>
+  <div class="card mt2">
+    <div class="card-title">📰 最新待審心得</div>
+    <div id="homeRecent"><div class="loading"><span class="spin"></span>載入中…</div></div>
+  </div>
+</div>
+
+<!-- ── SUBMIT ── -->
+<div class="page" id="page-submit">
+  <h2 class="pg-title">✍️ 提交閱讀心得</h2>
+  <p class="pg-sub">填寫書籍資料與閱讀心得（至少 100 字），提交後由老師審核</p>
+  <div class="card" style="max-width:680px;margin:0 auto">
+    <div class="sbox st-amber">
+      <div class="sbox-t">👤 學生資料</div>
+      <div class="fg-grid">
+        <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="f-cls" placeholder="例：五年甲班"></div>
+        <div class="fg"><label>姓名<span class="req">*</span></label><input class="fi" type="text" id="f-nm" placeholder="請輸入真實姓名"></div>
+      </div>
+    </div>
+    <div class="sbox st-blue">
+      <div class="sbox-t">📖 書籍資料</div>
+      <div class="fg-grid">
+        <div class="fg"><label>書名<span class="req">*</span></label><input class="fi" type="text" id="f-title" placeholder="請輸入書名"></div>
+        <div class="fg"><label>作者<span class="req">*</span></label><input class="fi" type="text" id="f-author" placeholder="作者名稱"></div>
+        <div class="fg full"><label>出版社<span class="req">*</span></label><input class="fi" type="text" id="f-pub" placeholder="出版社名稱"></div>
+      </div>
+    </div>
+    <div class="sbox st-green">
+      <div class="sbox-t">✏️ 閱讀心得</div>
+      <div class="fg">
+        <label>心得內容<span class="req">*</span> <span class="muted" style="font-weight:400">（至少 100 字）</span></label>
+        <textarea class="ft" id="f-review" placeholder="請分享您的閱讀心得、感想、收穫或推薦理由……" rows="8"></textarea>
+      </div>
+      <div class="char-row">
+        <span class="char-warn" id="charWarn" style="display:none">⚠️ 字數不足，請繼續填寫</span>
+        <div class="char-bar-w"><div class="char-bar-f" id="charFill" style="width:0%;background:var(--red)"></div></div>
+        <span class="char-cnt" id="charCnt">0 字</span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="clearForm()">🗑️ 清除</button>
+      <button class="btn btn-primary" onclick="submitReview()">📤 提交心得</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PASSPORT ── -->
+<div class="page" id="page-passport">
+  <h2 class="pg-title">🎫 我的閱讀護照</h2>
+  <p class="pg-sub">個人累積閱讀紀錄與成就</p>
+  <div id="passportContent">
+    <div class="card">
+      <div class="empty"><div class="empty-ico">🔒</div><p>請先登入以查看您的閱讀護照</p>
+        <button class="btn btn-primary mt2" onclick="goLogin('student')">📖 學生登入</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LEADERBOARD ── -->
+<div class="page" id="page-leaderboard">
+  <h2 class="pg-title">🏆 閱讀排行榜</h2>
+  <p class="pg-sub">全校學生閱讀量排行（依審核通過冊數）</p>
+  <div class="card">
+    <div class="tabs" id="lbTabs">
+      <button class="tab-btn active" onclick="switchTab('lbBooks','lbTabContent',this)">📚 閱讀冊數</button>
+      <button class="tab-btn" onclick="switchTab('lbRevs','lbTabContent',this)">✍️ 心得篇數</button>
+    </div>
+    <div id="lbTabContent">
+      <div class="tab-pane active" id="lbBooks">
+        <div class="search-row">
+          <input class="fi" type="text" id="lbQ" placeholder="搜尋姓名或班級…" oninput="filterLB()">
+          <select class="fs" id="lbGr" style="max-width:130px" onchange="filterLB()">
+            <option value="">所有年級</option>
+            <option>一年</option><option>二年</option><option>三年</option>
+            <option>四年</option><option>五年</option><option>六年</option>
+          </select>
+        </div>
+        <ul class="lb-list" id="lbBookList"><li class="loading"><span class="spin"></span>載入中…</li></ul>
+      </div>
+      <div class="tab-pane" id="lbRevs">
+        <ul class="lb-list" id="lbRevList"><li class="loading"><span class="spin"></span>載入中…</li></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ANALYTICS ── -->
+<div class="page" id="page-analytics">
+  <h2 class="pg-title">📊 閱讀情形年級分析</h2>
+  <p class="pg-sub">各年級閱讀習慣、心得審核統計</p>
+  <div class="stats-row" id="anaCards"></div>
+  <div class="dash-grid mt2">
+    <div class="card">
+      <div class="card-title">📚 各年級通過冊數</div>
+      <div class="bar-chart" id="anaChart"><div class="loading"><span class="spin"></span></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 心得審核狀況</div>
+      <div id="anaRevStats"><div class="loading"><span class="spin"></span></div></div>
+    </div>
+  </div>
+  <div class="card mt2">
+    <div class="card-title">🗂️ 各年級詳細統計</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>年級</th><th>心得總數</th><th>待審核</th><th>已通過</th><th>未通過</th><th>通過率</th></tr></thead>
+        <tbody id="anaTbl"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADMIN ── -->
+<div class="page" id="page-admin">
+  <h2 class="pg-title">⚙️ 管理後台</h2>
+  <p class="pg-sub">審核心得、編修資料、匯出報表</p>
+  <div class="tabs" id="admTabs">
+    <button class="tab-btn active" onclick="switchTab('admRev','admTabContent',this)">📋 心得審核</button>
+    <button class="tab-btn" onclick="switchTab('admRec','admTabContent',this);loadAdminRec()">📝 資料管理</button>
+    <button class="tab-btn" onclick="switchTab('admExp','admTabContent',this)">📥 匯出</button>
+    <button class="tab-btn" onclick="switchTab('admSet','admTabContent',this)">⚙️ 設定</button>
+  </div>
+  <div id="admTabContent">
+    <!-- 審核 -->
+    <div class="tab-pane active" id="admRev">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.85rem">
+        <div class="tabs" style="margin-bottom:0;border-bottom:none">
+          <button class="tab-btn active" onclick="filterRevs('pending',this)">⏳ 待審核 <span class="badge b-pend" id="pendBadge">0</span></button>
+          <button class="tab-btn" onclick="filterRevs('approved',this)">✅ 已通過</button>
+          <button class="tab-btn" onclick="filterRevs('rejected',this)">❌ 未通過</button>
+          <button class="tab-btn" onclick="filterRevs('all',this)">全部</button>
+        </div>
+        <button class="btn btn-blue btn-sm" onclick="loadRevs()">🔄 重新整理</button>
+      </div>
+      <div id="revList"><div class="loading"><span class="spin"></span>載入中…</div></div>
+    </div>
+    <!-- 資料管理 -->
+    <div class="tab-pane" id="admRec">
+      <div style="display:flex;gap:.55rem;justify-content:space-between;flex-wrap:wrap;margin-bottom:.85rem">
+        <input class="fi" type="text" placeholder="搜尋姓名、班級、書名…" id="recQ" oninput="filterRec()" style="flex:1;max-width:380px">
+        <button class="btn btn-primary btn-sm" onclick="openEdit(0)">＋ 新增</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>日期</th><th>班級</th><th>姓名</th><th>書名</th><th>作者</th><th>出版社</th><th>字數</th><th>狀態</th><th>操作</th></tr></thead>
+          <tbody id="recTbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- 匯出 -->
+    <div class="tab-pane" id="admExp">
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-title">📥 匯出選項</div>
+          <div class="fg mt1"><label>狀態篩選</label>
+            <select class="fs" id="expSt">
+              <option value="">全部</option>
+              <option value="approved">已通過</option>
+              <option value="pending">待審核</option>
+              <option value="rejected">未通過</option>
+            </select>
+          </div>
+          <div class="fg mt1"><label>班級篩選</label>
+            <input class="fi" type="text" id="expCls" placeholder="留空為全部">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:.45rem;margin-top:1.1rem">
+            <button class="btn btn-ok" onclick="exportCSV()">📊 匯出 CSV</button>
+            <button class="btn btn-blue" onclick="exportJSON()">📋 匯出 JSON</button>
+            <button class="btn btn-ghost" onclick="printReport()">🖨️ 列印報表</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📈 目前資料統計</div>
+          <div id="expStats"></div>
+        </div>
+      </div>
+    </div>
+    <!-- 設定 -->
+    <div class="tab-pane" id="admSet">
+      <div class="card" style="max-width:580px">
+        <div class="card-title">🔗 Google Apps Script 連線</div>
+        <div class="sbox" style="border-color:rgba(217,119,6,.25);background:rgba(255,251,235,.35)">
+          <div class="sbox-t" style="color:var(--amber)">GAS Web App URL</div>
+          <div class="fg"><input class="fi" type="url" id="gasUrl" placeholder="https://script.google.com/macros/s/…" style="font-size:.76rem"></div>
+          <p class="muted mt1">填入已部署的 Google Apps Script Web App URL</p>
+          <div style="display:flex;gap:.45rem;margin-top:.65rem">
+            <button class="btn btn-primary btn-sm" onclick="saveGasUrl()">💾 儲存</button>
+            <button class="btn btn-ghost btn-sm" onclick="testConn()">🔌 測試連線</button>
+          </div>
+        </div>
+        <div class="sbox" style="border-color:rgba(29,78,216,.18);background:rgba(239,246,255,.35);margin-bottom:.6rem">
+          <div class="sbox-t" style="color:var(--blue)">Google 試算表 ID</div>
+          <div class="fg"><input class="fi" type="text" id="sheetId" placeholder="試算表 ID"></div>
+          <a id="sheetLink" href="#" target="_blank" class="btn btn-blue btn-sm" style="margin-top:.55rem;text-decoration:none;display:inline-flex">🔗 開啟試算表</a>
+        </div>
+        <div class="card-title mt2">🏫 學校資訊</div>
+        <div class="fg-grid">
+          <div class="fg"><label>學校名稱</label><input class="fi" type="text" id="schoolName" placeholder="XX 國民小學"></div>
+          <div class="fg"><label>學年度</label><input class="fi" type="text" id="schoolYear" placeholder="113 學年度"></div>
+        </div>
+        <div class="card-title mt2">🔒 管理者密碼</div>
+        <div class="fg-grid">
+          <div class="fg"><label>新密碼</label><input class="fi" type="password" id="newPw" placeholder="留空不更改"></div>
+          <div class="fg"><label>確認密碼</label><input class="fi" type="password" id="confPw" placeholder="再次輸入"></div>
+        </div>
+        <div class="btn-row btn-row-s mt2">
+          <button class="btn btn-primary" onclick="saveSettings()">💾 儲存所有設定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATERPILLAR ── -->
+<div class="page" id="page-caterpillar">
+  <h2 class="pg-title">🦋 閱讀蛻變旅程</h2>
+  <p class="pg-sub">猶如毛毛蟲蛻變成蝴蝶，累積閱讀讓你從卵期一步步成長為閱讀達人！</p>
+
+  <div class="lookup-card">
+    <div class="card-title">🔍 查詢個人閱讀進度</div>
+    <div class="fg-grid" style="max-width:500px">
+      <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="lk-cls" placeholder="例：五年甲班"></div>
+      <div class="fg"><label>姓名<span class="req">*</span></label><input class="fi" type="text" id="lk-nm" placeholder="請輸入姓名" onkeydown="if(event.key==='Enter')lookupStudent()"></div>
+    </div>
+    <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="lookupStudent()">🔍 查詢</button>
+      <button class="btn btn-ghost btn-sm" onclick="clearLookup()">清除</button>
+    </div>
+    <div class="lookup-res" id="lookupResult"></div>
+  </div>
+
+  <div id="caterBanner" style="display:none">
+    <div class="cater-hero">
+      <div class="cater-deco" id="caterDeco">🥚</div>
+      <div class="ch-label">🦋 我的閱讀蛻變進度</div>
+      <div class="ch-title" id="caterName">－</div>
+      <div class="ch-sub"   id="caterCls">－</div>
+      <div class="ch-stats">
+        <div><div class="ch-val" id="caterTotal">0</div><div class="ch-lbl">累積本數</div></div>
+        <div><div class="ch-val" id="caterStage">卵期</div><div class="ch-lbl">當前階段</div></div>
+        <div><div class="ch-val" id="caterNext">11</div><div class="ch-lbl">下一目標</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="certSection" style="display:none">
+    <div class="cert-wrap">
+      <div style="position:relative;z-index:1">
+        <div class="cert-stars">✦ ✦ ✦</div>
+        <div class="cert-ico">🦋</div>
+        <div class="cert-h">閱讀達人證書</div>
+        <div class="cert-nm" id="certName">－</div>
+        <div class="cert-txt">恭喜您完成超過 41 本書的閱讀，猶如毛毛蟲歷經蛻變，展翅飛翔！<br>您的閱讀精神是全校同學的榜樣，繼續保持這份熱情吧！</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:1rem">
+          <div class="cert-seal">🏅<br>閱讀<br>達人</div>
+          <div style="font-size:.8rem;opacity:.6;line-height:1.7">累積閱讀<br><strong id="certBooks" style="font-size:1.4rem;color:#fde68a">0</strong> 本</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.3rem">
+    <div class="card-title">📈 成長階段進度</div>
+    <div class="stage-row" id="stageRow"></div>
+  </div>
+
+  <div class="ci-form">
+    <div class="ci-title">📚 新增閱讀打卡</div>
+    <div class="fg-grid">
+      <div class="fg"><label>班級<span class="req">*</span></label><input class="fi" type="text" id="ci-cls" placeholder="例：五年甲班"></div>
+      <div class="fg"><label>姓名<span class="req">*</span></label><input class="fi" type="text" id="ci-nm" placeholder="請輸入真實姓名"></div>
+      <div class="fg full"><label>書名<span class="req">*</span></label><input class="fi" type="text" id="ci-title" placeholder="請輸入書名"></div>
+      <div class="fg full">
+        <label>簡單心得 <span class="muted" style="font-weight:400">（選填，一句話也可以）</span></label>
+        <input class="fi" type="text" id="ci-thought" placeholder="這本書讓我…">
+      </div>
+    </div>
+    <div class="btn-row btn-row-s" style="margin-top:.85rem">
+      <button class="btn btn-ok" onclick="addCheckin()">✅ 打卡記錄</button>
+      <button class="btn btn-ghost" onclick="clearCheckinForm()">清除</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.95rem">
+      <div class="card-title" style="margin-bottom:0">📋 所有打卡紀錄</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <input class="fi" type="text" id="ciFilter" placeholder="搜尋班級或姓名…" oninput="renderCheckins()" style="max-width:180px;font-size:.78rem">
+        <button class="btn btn-ghost btn-sm" onclick="sortCheckinAsc=!sortCheckinAsc;renderCheckins()">⇅ 排序</button>
+      </div>
+    </div>
+    <div class="rl" id="checkinList">
+      <div class="empty"><div class="empty-ico">📖</div><p>尚無打卡記錄，快來記錄第一本書吧！</p></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ══════════════════════════════════════
+     OVERLAYS
+══════════════════════════════════════ -->
+<div class="overlay" id="ovReview">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-title" id="revModalTitle">📖 閱讀心得</div>
+    <div id="revModalBody"></div>
+    <div class="btn-row" id="revModalBtns"></div>
+  </div>
+</div>
+
+<div class="overlay" id="ovEdit">
+  <div class="modal">
+    <div class="modal-title" id="editTitle">✏️ 編輯紀錄</div>
+    <input type="hidden" id="editId">
+    <div class="fg-grid">
+      <div class="fg"><label>班級</label><input class="fi" type="text" id="e-cls" placeholder="五年甲班"></div>
+      <div class="fg"><label>姓名</label><input class="fi" type="text" id="e-nm"></div>
+      <div class="fg"><label>書名</label><input class="fi" type="text" id="e-title"></div>
+      <div class="fg"><label>作者</label><input class="fi" type="text" id="e-author"></div>
+      <div class="fg full"><label>出版社</label><input class="fi" type="text" id="e-pub"></div>
+      <div class="fg">
+        <label>狀態</label>
+        <select class="fs" id="e-status">
+          <option value="pending">待審核</option>
+          <option value="approved">已通過</option>
+          <option value="rejected">未通過</option>
+        </select>
+      </div>
+      <div class="fg"><label>審核備註</label><input class="fi" type="text" id="e-note" placeholder="可選"></div>
+      <div class="fg full"><label>心得內容</label><textarea class="ft" id="e-review" rows="4"></textarea></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="closeOv('ovEdit')">取消</button>
+      <button class="btn btn-primary" onclick="saveEdit()">💾 儲存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-w" id="toastW"></div>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+/* ──────── STATE ──────── */
+var GAS_URL = '';
+var ADM_PW  = 'admin123';
+var CU = null;
+var isAdmin = false;
+var allRevs = [];
+var allRecs = [];
+var curFilter = 'pending';
+
+/* ──────── MOCK DATA ──────── */
+var DB = [
+  {id:1,  ts:'2024-01-15', nm:'陳小明', cls:'五年甲班', title:'小王子',            author:'聖修伯里',     pub:'小天下',   review:'這是一本非常感人的書，讓我思考了很多生命中真正重要的事情。小王子的純真讓我印象深刻，他對朋友的珍視和對玫瑰的愛，都讓我感到深深的感動。讀完之後，我更珍惜身邊的人了。每個大人心裡都曾住著一個小王子，提醒自己不要忘記最初的純真。',     status:'pending',  note:''},
+  {id:2,  ts:'2024-01-14', nm:'李小花', cls:'四年乙班', title:'故事藥方',           author:'埃拉·法蘭西', pub:'遠流',     review:'這本書介紹了很多書籍，說明在不同的心情或情況下可以閱讀哪些書。我覺得非常有趣，讓我想要去閱讀書中推薦的每一本書。作者的文筆很優美，讀起來非常流暢。書中還有很多插圖，讓我更容易想像書裡描述的場景，是一本讓我愛不釋手的好書。',     status:'approved', note:'文筆流暢，推薦'},
+  {id:3,  ts:'2024-01-13', nm:'王大雄', cls:'六年甲班', title:'追風箏的孩子',       author:'卡勒德·胡賽尼',pub:'木馬文化', review:'這本書讓我哭了很多次，故事描述兩個孩子之間的友情與背叛，以及成年後的救贖。作者的文字非常有力量，讓我對阿富汗有了不同的認識，也讓我思考友情的真諦。讀完後，我深刻感受到：要有勇氣承認錯誤，才能得到真正的救贖。',             status:'approved', note:''},
+  {id:4,  ts:'2024-01-12', nm:'張小英', cls:'三年丙班', title:'昆蟲記',             author:'法布爾',       pub:'親子天下', review:'我很喜歡這本書，裡面介紹了很多昆蟲的生態和行為，讓我對昆蟲有了全新的認識。法布爾的觀察非常仔細，描述昆蟲的方式就像在說故事一樣。書中蟬的生命週期讓我印象深刻，原來牠們要在地下等待好幾年才能飛翔。這讓我學到了耐心的重要性。',         status:'pending',  note:''},
+  {id:5,  ts:'2024-01-11', nm:'林小智', cls:'五年乙班', title:'十萬個為什麼',       author:'米·伊林',      pub:'文盛書局', review:'這本書回答了很多生活中的問題，讓我了解了很多科學知識。我最喜歡關於水和空氣的部分，原來我們每天接觸的事物背後都有這麼多有趣的科學原理！讀完後我想繼續探索更多科學的奧秘。',                                                     status:'rejected', note:'字數不足，請補充'},
+  {id:6,  ts:'2024-01-10', nm:'陳小明', cls:'五年甲班', title:'哈利波特：神秘的魔法石',author:'J.K.羅琳',  pub:'皇冠',     review:'這是一本讓我愛不釋手的書！哈利波特的故事充滿了魔法和冒險，讓我一直想知道接下來會發生什麼事。書中的角色都非常立體，赫敏的聰明和榮恩的忠誠都讓我喜歡。最讓我感動的是，哈利在霍格華茲找到了真正屬於自己的家。',               status:'approved', note:''},
+  {id:7,  ts:'2024-01-09', nm:'黃小美', cls:'二年甲班', title:'彩虹魚',             author:'馬可斯·費斯特',pub:'上誼',     review:'彩虹魚非常漂亮，他學會了分享讓我很感動。書裡面的圖畫非常美麗，閃閃發光的鱗片讓人想要摸一摸。我也要學習彩虹魚，把好東西和朋友分享。媽媽說，分享是最美好的事情，讀完這本書我更加明白了這個道理，以後我也要把玩具和好朋友分享。',               status:'approved', note:''},
+  {id:8,  ts:'2024-01-08', nm:'吳小強', cls:'一年乙班', title:'好餓的毛毛蟲',       author:'艾瑞·卡爾',   pub:'上誼',     review:'毛毛蟲吃了很多東西最後變成蝴蝶！我很喜歡這本書，因為圖片很漂亮，顏色很鮮豔。老師說這叫做蛻變，就像我們努力學習，也會變得更好更厲害。毛毛蟲的故事讓我明白，只要努力，每個人都能變成更好的自己，這讓我受到很大的鼓勵。',                 status:'approved', note:''},
+  {id:9,  ts:'2024-01-07', nm:'林小雨', cls:'六年乙班', title:'老人與海',           author:'海明威',       pub:'志文',     review:'這是一本非常震撼的書，老漁夫聖地亞哥獨自出海，與巨大的馬林魚搏鬥了三天三夜，最終卻被鯊魚吃掉。但老人不放棄的精神深深打動了我。他雖然失敗了，卻展現了人類對抗命運的勇氣。那句「人可以被毀滅，但不可以被打敗」讓我深思，激勵我面對困難不輕易放棄。', status:'approved', note:''},
+  {id:10, ts:'2024-01-06', nm:'陳小雅', cls:'四年甲班', title:'夏洛的網',           author:'懷特',         pub:'遠流',     review:'這是一本令人感動落淚的友情故事。蜘蛛夏洛為了救好朋友威爾伯，用生命編織出美麗的詞語。夏洛最後雖然死了，但她的孩子們繼承了她的精神。讀完這本書，我更珍惜和好朋友之間的情誼。友情是世界上最珍貴的東西，真正的朋友會在你最需要的時候出現，無私付出。',  status:'pending',  note:''},
+];
+
+/* ──────── HELPER UTILITIES ──────── */
+var CBGS = [
+  'linear-gradient(135deg,#fde68a,#f59e0b)',
+  'linear-gradient(135deg,#a7f3d0,#10b981)',
+  'linear-gradient(135deg,#bfdbfe,#3b82f6)',
+  'linear-gradient(135deg,#fecaca,#ef4444)',
+  'linear-gradient(135deg,#ddd6fe,#7c3aed)'
+];
+var CEMS = ['📗','📘','📙','📕','📓'];
+
+function gv(id)   { var e=document.getElementById(id); return e?e.value:''; }
+function sv(id,v) { var e=document.getElementById(id); if(e)e.value=v; }
+function st(id,v) { var e=document.getElementById(id); if(e)e.textContent=v; }
+function eid(id)  { return document.getElementById(id); }
+function cbg(id)  { return CBGS[id%CBGS.length]; }
+function cem(id)  { return CEMS[id%CEMS.length]; }
+
+function slabel(s) {
+  return s==='approved'?'已通過' : s==='rejected'?'未通過' : '待審核';
+}
+function sbadge(s) {
+  return s==='approved'?'b-appr' : s==='rejected'?'b-rej' : 'b-pend';
+}
+
+/* ──────── INIT ──────── */
+document.addEventListener('DOMContentLoaded', function() {
+  loadSettings();
+  try {
+    var s = localStorage.getItem('cu');
+    if (s) { CU=JSON.parse(s); isAdmin=CU.isAdmin||false; applySession(); }
+  } catch(e) {}
+  loadDashboard();
+  var rev = eid('f-review');
+  if (rev) rev.addEventListener('input', updateChar);
+  document.querySelectorAll('.overlay').forEach(function(o) {
+    o.addEventListener('click', function(e) { if(e.target===o) o.classList.remove('open'); });
+  });
+});
+
+/* ──────── SETTINGS ──────── */
+function loadSettings() {
+  GAS_URL = localStorage.getItem('gasUrl') || '';
+  ADM_PW  = localStorage.getItem('adminPass') || 'admin123';
+  sv('gasUrl',     GAS_URL);
+  sv('sheetId',    localStorage.getItem('sheetId')||'');
+  sv('schoolName', localStorage.getItem('schoolName')||'');
+  sv('schoolYear', localStorage.getItem('schoolYear')||'');
+  var sid = localStorage.getItem('sheetId')||'';
+  if (sid) {
+    var sl = eid('sheetLink');
+    if (sl) sl.href = 'https://docs.google.com/spreadsheets/d/'+sid+'/edit';
+  }
+}
+function saveSettings() {
+  var np=gv('newPw'), cp=gv('confPw');
+  if (np) {
+    if (np!==cp) return toast('兩次密碼不一致','err');
+    localStorage.setItem('adminPass',np); ADM_PW=np;
+  }
+  localStorage.setItem('gasUrl',     gv('gasUrl'));
+  localStorage.setItem('sheetId',    gv('sheetId'));
+  localStorage.setItem('schoolName', gv('schoolName'));
+  localStorage.setItem('schoolYear', gv('schoolYear'));
+  GAS_URL = gv('gasUrl');
+  var sid = gv('sheetId');
+  if (sid) { var sl=eid('sheetLink'); if(sl) sl.href='https://docs.google.com/spreadsheets/d/'+sid+'/edit'; }
+  toast('設定已儲存');
+}
+function saveGasUrl() { GAS_URL=gv('gasUrl'); localStorage.setItem('gasUrl',GAS_URL); toast('GAS URL 已儲存'); }
+function testConn() {
+  if (!GAS_URL) return toast('請先填入 GAS URL','err');
+  toast('測試連線中…');
+  fetch(GAS_URL+'?action=ping')
+    .then(function(r){ return r.json(); })
+    .then(function(d){ toast(d.ok?'連線成功！':'連線異常'); })
+    .catch(function(){ toast('無法連線','err'); });
+}
+function apiPost(a,d) {
+  d = d||{};
+  if (!GAS_URL) return Promise.resolve({success:true});
+  return fetch(GAS_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(Object.assign({action:a},d))
+  }).then(function(r){ return r.json(); }).catch(function(){ return {success:false}; });
+}
+
+/* ──────── NAVIGATION ──────── */
+function showPage(n) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn,.dr-btn').forEach(function(b){ b.classList.remove('active'); });
+  var pg = eid('page-'+n);
+  if (pg) pg.classList.add('active');
+  // highlight nav
+  document.querySelectorAll('.nav-btn').forEach(function(b) {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'"+n+"'")>=0) b.classList.add('active');
+  });
+  document.querySelectorAll('.dr-btn').forEach(function(b) {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'"+n+"'")>=0) b.classList.add('active');
+  });
+  if (n==='leaderboard') loadLB();
+  if (n==='analytics')   loadAna();
+  if (n==='admin')       { loadRevs(); loadExpStats(); }
+  if (n==='passport')    loadPassport();
+  if (n==='caterpillar') loadCaterpillar();
+  window.scrollTo(0,0);
+}
+function goDrPage(n) { showPage(n); closeDrawer(); }
+
+/* ──────── LOGIN ──────── */
+function goLogin(t) {
+  ['loginStudent','loginAdmin'].forEach(function(id){ eid(id).classList.remove('vis'); });
+  eid(t==='student'?'loginStudent':'loginAdmin').classList.add('vis');
+  if (t==='student') { sv('s-cls',''); sv('s-nm',''); }
+  else { sv('a-pw',''); }
+}
+function goBack() {
+  ['loginStudent','loginAdmin'].forEach(function(id){ eid(id).classList.remove('vis'); });
+}
+function doStudentLogin() {
+  var cls=gv('s-cls').trim(), nm=gv('s-nm').trim();
+  if (!cls) return toast('請填寫班級','err');
+  if (!nm)  return toast('請填寫姓名','err');
+  CU={nm:nm, cls:cls, isAdmin:false, id:nm+'_'+cls};
+  isAdmin=false;
+  localStorage.setItem('cu',JSON.stringify(CU));
+  applySession(); goBack(); toast('歡迎，'+nm+'！');
+}
+function doAdminLogin() {
+  var pw=gv('a-pw');
+  if (pw!==ADM_PW) return toast('密碼錯誤','err');
+  CU={nm:'管理者', cls:'', isAdmin:true, id:'admin'};
+  isAdmin=true;
+  localStorage.setItem('cu',JSON.stringify(CU));
+  applySession(); goBack(); showPage('admin'); toast('管理者登入成功');
+}
+function logout() {
+  CU=null; isAdmin=false; localStorage.removeItem('cu');
+  applySession(); showPage('home'); toast('已登出');
+}
+
+function applySession() {
+  var tr = eid('topbarRight');
+  var na = eid('navAdm');
+  var da = eid('drAdm');
+  var du = eid('drawerUserArea');
+  if (CU) {
+    tr.innerHTML = '<div class="user-chip"><div class="user-av">'+CU.nm.charAt(0)+'</div>'
+      +'<span class="user-nm">'+CU.nm+(CU.cls?' &middot; '+CU.cls:'')+'</span></div>'
+      +'<button class="btn-logout" onclick="logout()">登出</button>';
+    na.style.display = isAdmin?'':'none';
+    da.style.display = isAdmin?'':'none';
+    du.innerHTML = '<div class="dr-user"><div class="dr-user-info"><span>'+CU.nm+'</span>'
+      +'<small>'+(CU.cls||'管理者')+'</small></div>'
+      +'<button class="btn btn-ghost btn-sm" onclick="logout();closeDrawer()">登出</button></div>';
+    if (!isAdmin) { sv('f-cls',CU.cls); sv('f-nm',CU.nm); }
+    updateHero();
+  } else {
+    tr.innerHTML = '<button class="btn-enter" onclick="goLogin(\'student\')">登入</button>';
+    na.style.display = 'none';
+    da.style.display = 'none';
+    du.innerHTML = '<button class="dr-btn" onclick="goLogin(\'student\');closeDrawer()" style="color:var(--amber-lt)">📖 學生登入</button>'
+      +'<button class="dr-btn" onclick="goLogin(\'admin\');closeDrawer()" style="color:var(--purple-lt)">🔑 管理者登入</button>';
+  }
+  var banner = eid('homeBanner');
+  if (banner) banner.style.display = (CU&&!isAdmin)?'':'none';
+}
+
+/* ──────── HERO ──────── */
+function updateHero() {
+  if (!CU||isAdmin) return;
+  var mine = DB.filter(function(r){ return r.nm===CU.nm&&r.cls===CU.cls; });
+  var ok   = mine.filter(function(r){ return r.status==='approved'; });
+  st('hName',CU.nm); st('hCls',CU.cls);
+  st('hBooks',ok.length);
+  st('hPend',mine.filter(function(r){ return r.status==='pending'; }).length);
+  st('hTotal',mine.length);
+}
+
+/* ──────── HAMBURGER ──────── */
+function toggleDrawer() { eid('hbg').classList.toggle('open'); eid('drawer').classList.toggle('open'); }
+function closeDrawer()  { eid('hbg').classList.remove('open'); eid('drawer').classList.remove('open'); }
+
+/* ──────── DASHBOARD ──────── */
+function loadDashboard() {
+  var s = calcStats();
+  st('st-books',s.books); st('st-reviews',s.total);
+  st('st-students',s.students); st('st-approved',s.approved); st('st-pending',s.pending);
+  renderHomeLB(); renderHomeChart(); renderHomeRecent();
+}
+function calcStats() {
+  var ok = DB.filter(function(r){ return r.status==='approved'; });
+  var uqSet={};
+  DB.forEach(function(r){ uqSet[r.nm+'_'+r.cls]=1; });
+  return {
+    books:ok.length, total:DB.length,
+    students:Object.keys(uqSet).length,
+    approved:ok.length,
+    pending:DB.filter(function(r){ return r.status==='pending'; }).length
+  };
+}
+function renderHomeLB() {
+  var m={};
+  DB.filter(function(r){ return r.status==='approved'; }).forEach(function(r){
+    var k=r.nm+'_'+r.cls;
+    if(!m[k]) m[k]={nm:r.nm,cls:r.cls,n:0};
+    m[k].n++;
+  });
+  var sorted=Object.values(m).sort(function(a,b){ return b.n-a.n; }).slice(0,5);
+  var ul=eid('homeLB');
+  if (!sorted.length) { ul.innerHTML='<li class="empty"><div class="empty-ico">📭</div><p>尚無資料</p></li>'; return; }
+  var mx=sorted[0].n||1, html='';
+  sorted.forEach(function(s,i){
+    var rc=i<3?'r'+(i+1):'rn';
+    html+='<li class="lb-item">'
+      +'<div class="rank '+rc+'">'+(i+1)+'</div>'
+      +'<div class="lb-info"><div class="lb-name">'+s.nm+'</div><div class="lb-meta">'+s.cls+'</div></div>'
+      +'<div class="lb-bar-w"><div class="lb-bar-f" style="width:'+Math.round(s.n/mx*100)+'%"></div></div>'
+      +'<span class="lb-cnt">'+s.n+' 冊</span></li>';
+  });
+  ul.innerHTML=html;
+}
+function renderHomeChart() {
+  var gs=['一年','二年','三年','四年','五年','六年'];
+  var cs=gs.map(function(g){ return DB.filter(function(r){ return r.status==='approved'&&r.cls.indexOf(g)===0; }).length; });
+  var mx=Math.max.apply(null,cs.concat([1])), html='';
+  cs.forEach(function(c,i){
+    var ht=Math.max(Math.round(c/mx*105),4);
+    html+='<div class="bar-col"><span class="bar-top">'+c+'</span>'
+      +'<div class="bar-body" style="height:'+ht+'px"></div>'
+      +'<span class="bar-lbl">'+gs[i]+'</span></div>';
+  });
+  eid('homeChart').innerHTML=html;
+}
+function renderHomeRecent() {
+  var p=DB.filter(function(r){ return r.status==='pending'; }).slice(0,3);
+  var el=eid('homeRecent');
+  if (!p.length) { el.innerHTML='<div class="empty"><div class="empty-ico">✅</div><p>目前沒有待審核的心得</p></div>'; return; }
+  var html='';
+  p.forEach(function(r){
+    html+='<div class="ri">'
+      +'<div class="ri-cover" style="background:'+cbg(r.id)+'">'+cem(r.id)+'</div>'
+      +'<div class="ri-body"><div class="ri-title">'+r.title+'</div>'
+      +'<div class="ri-by">'+r.nm+' ／ '+r.cls+' ／ '+r.ts+'</div>'
+      +'<div class="ri-tags"><span class="ri-tag">作者：'+r.author+'</span>'
+      +'<span class="badge b-pend"><span class="b-dot"></span>待審核</span></div></div></div>';
+  });
+  el.innerHTML=html;
+}
+
+/* ──────── SUBMIT ──────── */
+function updateChar() {
+  var len=eid('f-review').value.length;
+  var pct=Math.min(len/100*100,100);
+  var fill=eid('charFill'), cnt=eid('charCnt'), warn=eid('charWarn');
+  fill.style.width=pct+'%';
+  fill.style.background=len>=100?'var(--green)':len>=60?'var(--amber)':'var(--red)';
+  cnt.textContent=len+' 字';
+  cnt.style.color=len>=100?'var(--green)':'var(--muted)';
+  warn.style.display=(len>0&&len<100)?'':'none';
+}
+function submitReview() {
+  var cls=gv('f-cls').trim(), nm=gv('f-nm').trim();
+  var title=gv('f-title').trim(), auth=gv('f-author').trim();
+  var pub=gv('f-pub').trim(), rev=gv('f-review').trim();
+  if (!cls)       return toast('請填寫班級','err');
+  if (!nm)        return toast('請填寫姓名','err');
+  if (!title)     return toast('請填寫書名','err');
+  if (!auth)      return toast('請填寫作者','err');
+  if (!pub)       return toast('請填寫出版社','err');
+  if (rev.length<100) return toast('心得僅 '+rev.length+' 字，請至少填寫 100 字','err');
+  var rec={id:Date.now(), ts:new Date().toLocaleDateString('zh-TW'), nm:nm, cls:cls,
+    title:title, author:auth, pub:pub, review:rev, status:'pending', note:''};
+  DB.push(rec);
+  apiPost('submitReview',rec);
+  toast('心得已提交，等待審核！');
+  clearForm(); loadDashboard(); updateHero();
+}
+function clearForm() {
+  ['f-title','f-author','f-pub','f-review'].forEach(function(id){ sv(id,''); });
+  updateChar();
+}
+
+/* ──────── PASSPORT ──────── */
+function loadPassport() {
+  var el=eid('passportContent');
+  if (!CU||isAdmin) {
+    el.innerHTML='<div class="card"><div class="empty"><div class="empty-ico">🔒</div>'
+      +'<p>請先登入以查看您的閱讀護照</p>'
+      +'<button class="btn btn-primary mt2" onclick="goLogin(\'student\')">📖 學生登入</button></div></div>';
+    return;
+  }
+  var mine=DB.filter(function(r){ return r.nm===CU.nm&&r.cls===CU.cls; });
+  var ok=mine.filter(function(r){ return r.status==='approved'; });
+  var pend=mine.filter(function(r){ return r.status==='pending'; });
+  var rej=mine.filter(function(r){ return r.status==='rejected'; });
+  var ach=getAch(ok.length);
+  var html='<div class="ph"><div class="ph-wm">XINGJIA READING PASSPORT</div>'
+    +'<div class="ph-lbl">📚 興嘉國小學生閱讀護照</div>'
+    +'<div class="ph-name">'+CU.nm+'</div>'
+    +'<div class="ph-cls">'+CU.cls+'</div>'
+    +'<div class="ph-stats">'
+    +'<div><div class="ph-val">'+ok.length+'</div><div class="ph-lbl2">通過冊數</div></div>'
+    +'<div><div class="ph-val">'+pend.length+'</div><div class="ph-lbl2">待審核</div></div>'
+    +'<div><div class="ph-val">'+mine.length+'</div><div class="ph-lbl2">心得篇數</div></div>'
+    +'</div></div>';
+  html+='<div class="dash-grid">';
+  // status
+  html+='<div class="card"><div class="card-title">📊 審核狀態</div>';
+  [['待審核',pend.length,'b-pend'],['已通過',ok.length,'b-appr'],['未通過',rej.length,'b-rej']].forEach(function(row){
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:.52rem 0;border-bottom:1px solid var(--border)">'
+      +'<span class="muted">'+row[0]+'</span>'
+      +'<span class="badge '+row[2]+'"><span class="b-dot"></span>'+row[1]+'</span></div>';
+  });
+  html+='</div>';
+  // achievements
+  html+='<div class="card"><div class="card-title">🏅 閱讀成就</div>';
+  ach.forEach(function(a){
+    html+='<div style="display:flex;align-items:center;gap:.55rem;padding:.38rem 0">'
+      +'<span style="font-size:1.25rem">'+a.icon+'</span>'
+      +'<div><div style="font-weight:700;font-size:.83rem">'+a.name+'</div><div class="muted">'+a.desc+'</div></div></div>';
+  });
+  html+='</div></div>';
+  // records
+  html+='<div class="card mt2"><div class="card-title">📚 閱讀紀錄</div>';
+  if (mine.length) {
+    mine.forEach(function(r){
+      html+='<div class="ri">'
+        +'<div class="ri-cover" style="background:'+cbg(r.id)+'">'+cem(r.id)+'</div>'
+        +'<div class="ri-body"><div class="ri-title">'+r.title+'</div>'
+        +'<div class="ri-by">'+r.author+' ／ '+r.pub+' ／ '+r.ts+'</div>'
+        +'<div class="ri-tags"><span class="ri-tag">心得 '+r.review.length+' 字</span>'
+        +'<span class="badge '+sbadge(r.status)+'"><span class="b-dot"></span>'+slabel(r.status)+'</span>'
+        +(r.note?'<span class="ri-tag" style="color:var(--red)">💬 '+r.note+'</span>':'')
+        +'</div></div>'
+        +'<div class="muted" style="font-size:.7rem;white-space:nowrap;flex-shrink:0">'+r.ts+'</div></div>';
+    });
+  } else {
+    html+='<div class="empty"><div class="empty-ico">📭</div><p>尚無閱讀紀錄，快去提交第一篇心得吧！</p></div>';
+  }
+  html+='</div>';
+  el.innerHTML=html;
+}
+function getAch(n) {
+  var l=[];
+  if(n>=1)  l.push({icon:'🌱',name:'閱讀新芽',  desc:'完成第一本書'});
+  if(n>=5)  l.push({icon:'📚',name:'書蟲',       desc:'累積閱讀 5 冊'});
+  if(n>=10) l.push({icon:'🦉',name:'知識貓頭鷹',desc:'累積閱讀 10 冊'});
+  if(n>=20) l.push({icon:'🌟',name:'閱讀之星',  desc:'累積閱讀 20 冊'});
+  if(!l.length) l.push({icon:'🔒',name:'尚無成就',desc:'開始閱讀解鎖成就！'});
+  return l;
+}
+
+/* ──────── LEADERBOARD ──────── */
+function loadLB() { renderLBBooks(); renderLBRevs(); }
+function buildStudMap() {
+  var m={};
+  DB.forEach(function(r){
+    var k=r.nm+'_'+r.cls;
+    if(!m[k]) m[k]={nm:r.nm,cls:r.cls,books:0,revs:0};
+    m[k].revs++;
+    if(r.status==='approved') m[k].books++;
+  });
+  return Object.values(m);
+}
+function renderLBBooks() { renderLBList('lbBookList',buildStudMap().sort(function(a,b){ return b.books-a.books; }),'books','冊'); }
+function renderLBRevs()  { renderLBList('lbRevList', buildStudMap().sort(function(a,b){ return b.revs-a.revs;  }),'revs', '篇'); }
+function renderLBList(id,data,key,unit) {
+  var ul=eid(id); if(!ul) return;
+  if(!data.length){ ul.innerHTML='<li class="empty"><div class="empty-ico">📭</div><p>尚無資料</p></li>'; return; }
+  var mx=data[0][key]||1, html='';
+  data.forEach(function(s,i){
+    var rc=i<3?'r'+(i+1):'rn';
+    html+='<li class="lb-item"><div class="rank '+rc+'">'+(i+1)+'</div>'
+      +'<div class="lb-info"><div class="lb-name">'+s.nm+'</div><div class="lb-meta">'+s.cls+'</div></div>'
+      +'<div class="lb-bar-w"><div class="lb-bar-f" style="width:'+Math.round(s[key]/mx*100)+'%"></div></div>'
+      +'<span class="lb-cnt">'+s[key]+' '+unit+'</span></li>';
+  });
+  ul.innerHTML=html;
+}
+function filterLB() {
+  var q=gv('lbQ').toLowerCase(), gr=gv('lbGr');
+  eid('lbBookList').querySelectorAll('.lb-item').forEach(function(li){
+    var nm=(li.querySelector('.lb-name')?li.querySelector('.lb-name').textContent.toLowerCase():'');
+    var cls=(li.querySelector('.lb-meta')?li.querySelector('.lb-meta').textContent:'');
+    li.style.display=(!q||nm.indexOf(q)>=0||cls.toLowerCase().indexOf(q)>=0)&&(!gr||cls.indexOf(gr)>=0)?'':'none';
+  });
+}
+
+/* ──────── ANALYTICS ──────── */
+function loadAna() {
+  var gs=['一年','二年','三年','四年','五年','六年'];
+  var clrs=['a-amber','a-green','a-blue','a-red','a-purple','a-amber'];
+  var icos=['🥇','🥈','🥉','📚','🌟','🎯'];
+  var cHtml='';
+  gs.forEach(function(g,i){
+    var all=DB.filter(function(r){ return r.cls.indexOf(g)===0; });
+    var ok=all.filter(function(r){ return r.status==='approved'; });
+    var uqSet={}; all.forEach(function(r){ uqSet[r.nm+'_'+r.cls]=1; });
+    cHtml+='<div class="scard"><div class="scard-bar '+clrs[i]+'"></div>'
+      +'<div class="scard-ico">'+icos[i]+'</div>'
+      +'<div class="scard-val">'+ok.length+'</div>'
+      +'<div class="scard-lbl">'+g+'年 通過</div>'
+      +'<div class="muted" style="margin-top:.18rem">'+Object.keys(uqSet).length+' 位學生</div></div>';
+  });
+  eid('anaCards').innerHTML=cHtml;
+  var cs=gs.map(function(g){ return DB.filter(function(r){ return r.cls.indexOf(g)===0&&r.status==='approved'; }).length; });
+  var mx=Math.max.apply(null,cs.concat([1])), barHtml='';
+  cs.forEach(function(c,i){
+    barHtml+='<div class="bar-col"><span class="bar-top g">'+c+'</span>'
+      +'<div class="bar-body g" style="height:'+Math.max(Math.round(c/mx*105),4)+'px"></div>'
+      +'<span class="bar-lbl">'+gs[i]+'</span></div>';
+  });
+  eid('anaChart').innerHTML=barHtml;
+  var tot=DB.length||1;
+  var pend=DB.filter(function(r){ return r.status==='pending'; }).length;
+  var appd=DB.filter(function(r){ return r.status==='approved'; }).length;
+  var rejd=DB.filter(function(r){ return r.status==='rejected'; }).length;
+  var revHtml='';
+  [['⏳ 待審核',pend,'var(--amber)'],['✅ 已通過',appd,'var(--green)'],['❌ 未通過',rejd,'var(--red)']].forEach(function(row){
+    var pct=Math.round(row[1]/tot*100);
+    revHtml+='<div style="margin-bottom:.85rem">'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:.28rem">'
+      +'<span style="font-size:.83rem;font-weight:600">'+row[0]+'</span>'
+      +'<span class="muted">'+row[1]+' 篇 / '+pct+'%</span></div>'
+      +'<div class="prog-w"><div class="prog-f" style="width:'+pct+'%;background:'+row[2]+'"></div></div></div>';
+  });
+  eid('anaRevStats').innerHTML=revHtml;
+  var tblHtml='';
+  gs.forEach(function(g){
+    var all=DB.filter(function(r){ return r.cls.indexOf(g)===0; });
+    var p2=all.filter(function(r){ return r.status==='pending'; }).length;
+    var a2=all.filter(function(r){ return r.status==='approved'; }).length;
+    var r2=all.filter(function(r){ return r.status==='rejected'; }).length;
+    var rate=all.length?Math.round(a2/all.length*100):0;
+    tblHtml+='<tr><td><span class="grade-pill">'+g+'年</span></td><td>'+all.length+'</td>'
+      +'<td><span class="badge b-pend">'+p2+'</span></td>'
+      +'<td><span class="badge b-appr">'+a2+'</span></td>'
+      +'<td><span class="badge b-rej">'+r2+'</span></td>'
+      +'<td><div style="display:flex;align-items:center;gap:.45rem">'
+      +'<div class="prog-w" style="width:58px"><div class="prog-f" style="width:'+rate+'%"></div></div>'
+      +'<span style="font-size:.76rem;font-weight:700">'+rate+'%</span></div></td></tr>';
+  });
+  eid('anaTbl').innerHTML=tblHtml;
+}
+
+/* ──────── ADMIN REVIEWS ──────── */
+function loadRevs() {
+  allRevs=DB.slice();
+  st('pendBadge',allRevs.filter(function(r){ return r.status==='pending'; }).length);
+  filterRevs(curFilter);
+}
+function filterRevs(status,btn) {
+  curFilter=status;
+  if (btn) {
+    document.querySelectorAll('[onclick^="filterRevs"]').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  var f=status==='all'?allRevs:allRevs.filter(function(r){ return r.status===status; });
+  var el=eid('revList');
+  if (!f.length) { el.innerHTML='<div class="empty"><div class="empty-ico">📭</div><p>沒有符合的心得</p></div>'; return; }
+  var html='';
+  f.forEach(function(r){
+    var pBtns=r.status==='pending'
+      ?'<button class="btn btn-ok btn-sm" onclick="setStatus('+r.id+',\'approved\')">✅</button>'
+       +'<button class="btn btn-danger btn-sm" onclick="promptReject('+r.id+')">❌</button>':'';
+    html+='<div class="ri">'
+      +'<div class="ri-cover" style="background:'+cbg(r.id)+'">'+cem(r.id)+'</div>'
+      +'<div class="ri-body" style="flex:1">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.45rem">'
+      +'<div style="min-width:0"><div class="ri-title">'+r.title+'</div>'
+      +'<div class="ri-by">'+r.nm+' ／ '+r.cls+' ／ '+r.ts+'</div></div>'
+      +'<span class="badge '+sbadge(r.status)+'" style="white-space:nowrap;flex-shrink:0"><span class="b-dot"></span>'+slabel(r.status)+'</span>'
+      +'</div>'
+      +'<div class="ri-tags mt1">'
+      +'<span class="ri-tag">作者：'+r.author+'</span>'
+      +'<span class="ri-tag">出版社：'+r.pub+'</span>'
+      +'<span class="ri-tag" style="color:var(--amber);font-weight:700">心得 '+r.review.length+' 字</span></div>'
+      +'<p class="ri-exc">'+r.review+'</p>'
+      +(r.note?'<div class="muted mt1">💬 '+r.note+'</div>':'')
+      +'</div>'
+      +'<div class="ri-acts">'
+      +'<button class="btn btn-ghost btn-sm" onclick="openRevDetail('+r.id+')">👁</button>'
+      +pBtns
+      +'<button class="btn btn-blue btn-sm" onclick="openEdit('+r.id+')">✏️</button>'
+      +'<button class="btn btn-danger btn-sm" onclick="delRec('+r.id+')">🗑</button>'
+      +'</div></div>';
+  });
+  el.innerHTML=html;
+}
+function setStatus(id,status,note) {
+  note=note||'';
+  var r=DB.find(function(x){ return x.id==id; });
+  if(r){ r.status=status; r.note=note; }
+  apiPost('updateStatus',{id:id,status:status,note:note});
+  loadRevs(); loadDashboard(); closeOv('ovReview');
+  toast(status==='approved'?'已通過':'已退回');
+}
+function promptReject(id) { var note=prompt('退回原因（選填）：')||''; setStatus(id,'rejected',note); }
+function openRevDetail(id) {
+  var r=DB.find(function(x){ return x.id==id; }); if(!r) return;
+  st('revModalTitle','📖 '+r.title);
+  eid('revModalBody').innerHTML=
+    '<div style="background:var(--bg);border-radius:var(--r-sm);padding:.85rem;margin-bottom:.95rem;font-size:.83rem">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">'
+    +'<div><b>班級：</b>'+r.cls+'</div><div><b>姓名：</b>'+r.nm+'</div>'
+    +'<div><b>書名：</b>'+r.title+'</div><div><b>作者：</b>'+r.author+'</div>'
+    +'<div style="grid-column:1/-1"><b>出版社：</b>'+r.pub+'</div>'
+    +'<div><b>日期：</b>'+r.ts+'</div><div><b>字數：</b>'+r.review.length+' 字</div>'
+    +'</div></div>'
+    +'<div style="background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:.95rem;font-size:.87rem;line-height:1.9;max-height:250px;overflow-y:auto">'+r.review+'</div>'
+    +(r.note?'<div class="muted mt1" style="background:var(--red-bg);border-radius:6px;padding:.45rem .75rem">💬 '+r.note+'</div>':'');
+  eid('revModalBtns').innerHTML=r.status==='pending'
+    ?'<button class="btn btn-ghost" onclick="closeOv(\'ovReview\')">關閉</button>'
+     +'<button class="btn btn-danger" onclick="promptReject('+id+')">❌ 退回</button>'
+     +'<button class="btn btn-ok" onclick="setStatus('+id+',\'approved\')">✅ 通過</button>'
+    :'<button class="btn btn-primary" onclick="closeOv(\'ovReview\')">關閉</button>';
+  eid('ovReview').classList.add('open');
+}
+
+/* ──────── ADMIN RECORDS ──────── */
+function loadAdminRec() { allRecs=DB.slice(); renderRecTbl(allRecs); }
+function renderRecTbl(data) {
+  var html='';
+  data.forEach(function(r){
+    var wc=r.review.length>=100?'var(--green)':'var(--red)';
+    html+='<tr><td class="muted" style="font-size:.72rem;white-space:nowrap">'+r.ts+'</td>'
+      +'<td><span class="grade-pill">'+r.cls+'</span></td>'
+      +'<td style="font-weight:600">'+r.nm+'</td>'
+      +'<td style="max-width:115px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+r.title+'">'+r.title+'</td>'
+      +'<td>'+r.author+'</td>'
+      +'<td style="max-width:85px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.pub+'</td>'
+      +'<td><span style="font-size:.73rem;font-weight:700;color:'+wc+'">'+r.review.length+'</span></td>'
+      +'<td><span class="badge '+sbadge(r.status)+'"><span class="b-dot"></span>'+slabel(r.status)+'</span></td>'
+      +'<td><div style="display:flex;gap:.22rem">'
+      +'<button class="btn btn-blue btn-xs" onclick="openEdit('+r.id+')">✏️</button>'
+      +'<button class="btn btn-danger btn-xs" onclick="delRec('+r.id+')">🗑</button>'
+      +'</div></td></tr>';
+  });
+  eid('recTbl').innerHTML=html;
+}
+function filterRec() {
+  var q=gv('recQ').toLowerCase();
+  renderRecTbl(allRecs.filter(function(r){
+    return !q||r.nm.toLowerCase().indexOf(q)>=0||r.cls.toLowerCase().indexOf(q)>=0||r.title.toLowerCase().indexOf(q)>=0;
+  }));
+}
+function openEdit(id) {
+  var r=id?DB.find(function(x){ return x.id==id; }):null;
+  st('editTitle',r?'✏️ 編輯紀錄':'＋ 新增紀錄');
+  sv('editId',r?r.id:''); sv('e-cls',r?r.cls:''); sv('e-nm',r?r.nm:'');
+  sv('e-title',r?r.title:''); sv('e-author',r?r.author:''); sv('e-pub',r?r.pub:'');
+  sv('e-status',r?r.status:'pending'); sv('e-note',r?r.note:''); sv('e-review',r?r.review:'');
+  eid('ovEdit').classList.add('open');
+}
+function saveEdit() {
+  var id=gv('editId');
+  var d={cls:gv('e-cls'),nm:gv('e-nm'),title:gv('e-title'),author:gv('e-author'),
+    pub:gv('e-pub'),status:gv('e-status'),note:gv('e-note'),review:gv('e-review')};
+  if (id) {
+    var r=DB.find(function(x){ return x.id==id; });
+    if(r) Object.assign(r,d);
+    apiPost('updateRecord',Object.assign({id:id},d));
+  } else {
+    d.id=Date.now(); d.ts=new Date().toLocaleDateString('zh-TW');
+    DB.push(d);
+  }
+  closeOv('ovEdit'); loadRevs(); loadAdminRec(); loadDashboard(); toast('已儲存');
+}
+function delRec(id) {
+  if (!confirm('確定要刪除這筆紀錄嗎？')) return;
+  var i=DB.findIndex(function(x){ return x.id==id; });
+  if(i>=0) DB.splice(i,1);
+  apiPost('deleteRecord',{id:id});
+  loadRevs(); loadAdminRec(); loadDashboard(); toast('已刪除');
+}
+
+/* ──────── EXPORT ──────── */
+function loadExpStats() {
+  var s=calcStats();
+  var rows=[['📚 總閱讀冊數',s.books],['✍️ 心得總篇數',s.total],['⏳ 待審核',s.pending],['✅ 已通過',s.approved],['👥 學生人數',s.students]];
+  var html='';
+  rows.forEach(function(row){
+    html+='<div style="display:flex;justify-content:space-between;padding:.58rem 0;border-bottom:1px solid var(--border)">'
+      +'<span>'+row[0]+'</span><strong>'+row[1]+'</strong></div>';
+  });
+  eid('expStats').innerHTML=html;
+}
+function expData() {
+  var d=DB.slice();
+  var st2=gv('expSt'), cls=gv('expCls').trim();
+  if(st2) d=d.filter(function(r){ return r.status===st2; });
+  if(cls) d=d.filter(function(r){ return r.cls.indexOf(cls)>=0; });
+  return d;
+}
+function exportCSV() {
+  var d=expData();
+  var h=['日期','班級','姓名','書名','作者','出版社','字數','狀態','備註','心得'];
+  var lines=[h.join(',')];
+  d.forEach(function(r){
+    lines.push([r.ts,r.cls,r.nm,r.title,r.author,r.pub,r.review.length,r.status,r.note,
+      '"'+r.review.replace(/"/g,'""')+'"'].join(','));
+  });
+  dlFile('\uFEFF'+lines.join('\n'),'閱讀護照_'+new Date().toLocaleDateString('zh-TW')+'.csv','text/csv;charset=utf-8');
+  toast('CSV 已匯出');
+}
+function exportJSON() {
+  dlFile(JSON.stringify(expData(),null,2),'閱讀護照_'+new Date().toLocaleDateString('zh-TW')+'.json','application/json');
+  toast('JSON 已匯出');
+}
+function dlFile(c,n,t) {
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([c],{type:t}));
+  a.download=n; a.click();
+}
+function printReport() {
+  var school=localStorage.getItem('schoolName')||'學校';
+  var year=localStorage.getItem('schoolYear')||'';
+  var d=expData(), s=calcStats(), rows='';
+  d.forEach(function(r){
+    rows+='<tr><td>'+r.ts+'</td><td>'+r.cls+'</td><td>'+r.nm+'</td>'
+      +'<td>'+r.title+'</td><td>'+r.author+'</td><td>'+r.pub+'</td>'
+      +'<td>'+r.review.length+'</td><td>'+slabel(r.status)+'</td></tr>';
+  });
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>閱讀護照報表</title>'
+    +'<style>body{font-family:serif;padding:2cm;color:#111}'
+    +'h1{font-size:1.5rem;border-bottom:2px solid #333;padding-bottom:.5rem}'
+    +'.st{display:flex;gap:2rem;margin:1rem 0;flex-wrap:wrap}'
+    +'.sv{font-size:2rem;font-weight:bold}.sl{font-size:.75rem;color:#666}'
+    +'table{width:100%;border-collapse:collapse;font-size:.83rem;margin-top:1rem}'
+    +'th{background:#f3f3f3;border:1px solid #ddd;padding:.45rem;text-align:left}'
+    +'td{border:1px solid #ddd;padding:.38rem .45rem}'
+    +'</style></head><body>'
+    +'<h1>📚 興嘉國小學生閱讀護照報表</h1>'
+    +'<p style="color:#666">'+year+' ｜ 列印：'+new Date().toLocaleString('zh-TW')+'</p>'
+    +'<div class="st">'
+    +'<div><div class="sv">'+s.books+'</div><div class="sl">通過冊數</div></div>'
+    +'<div><div class="sv">'+s.students+'</div><div class="sl">學生人數</div></div>'
+    +'<div><div class="sv">'+s.approved+'</div><div class="sl">審核通過</div></div>'
+    +'<div><div class="sv">'+s.pending+'</div><div class="sl">待審核</div></div>'
+    +'</div>'
+    +'<table><thead><tr><th>日期</th><th>班級</th><th>姓名</th><th>書名</th><th>作者</th><th>出版社</th><th>字數</th><th>狀態</th></tr></thead>'
+    +'<tbody>'+rows+'</tbody></table>'
+    +'</body></html>';
+  var w=window.open('','_blank');
+  w.document.open(); w.document.write(html); w.document.close(); w.print();
+}
+
+/* ──────── TABS ──────── */
+function switchTab(tId,gId,btn) {
+  var g=eid(gId); if(!g) return;
+  g.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
+  // find the tabs container
+  var tabs=g.previousElementSibling;
+  if(tabs) tabs.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  var tp=eid(tId); if(tp) tp.classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+/* ──────── OVERLAYS ──────── */
+function closeOv(id) { eid(id).classList.remove('open'); }
+
+/* ──────── TOAST ──────── */
+function toast(msg,type) {
+  var w=eid('toastW');
+  var t=document.createElement('div');
+  t.className='toast '+(type==='err'?'t-err':type==='ok'?'t-ok':'t-default');
+  t.textContent=msg;
+  w.appendChild(t);
+  setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); },3200);
+}
+
+/* ══════════════════════════════════════
+   CATERPILLAR SYSTEM
+══════════════════════════════════════ */
+var STAGES=[
+  {key:'egg',      icon:'🥚',name:'卵期',  min:0, max:10,    desc:'閱讀的種子正在萌芽',   color:'#f59e0b',prog:'linear-gradient(90deg,#fde68a,#f59e0b)'},
+  {key:'larva',    icon:'🐛',name:'幼蟲期',min:11,max:30,    desc:'努力吸收知識養分',     color:'#16a34a',prog:'linear-gradient(90deg,#86efac,#16a34a)'},
+  {key:'pupa',     icon:'🥜',name:'蛹期',  min:31,max:60,    desc:'沉澱與蛻變中',         color:'#7c3aed',prog:'linear-gradient(90deg,#c4b5fd,#7c3aed)'},
+  {key:'butterfly',icon:'🦋',name:'成蟲期',min:61,max:999999,desc:'展翅飛翔的閱讀達人！', color:'#db2777',prog:'linear-gradient(90deg,#f9a8d4,#db2777)'},
+];
+var CERT_THRESHOLD=41;
+var CI_KEY='ci_records_v1';
+var ciRecords=[];
+var sortCheckinAsc=false;
+
+function loadCheckins() {
+  try { ciRecords=JSON.parse(localStorage.getItem(CI_KEY))||[]; } catch(e){ ciRecords=[]; }
+}
+function saveCheckins() { localStorage.setItem(CI_KEY,JSON.stringify(ciRecords)); }
+function getStageFor(n) {
+  for(var i=0;i<STAGES.length;i++){ if(n>=STAGES[i].min&&n<=STAGES[i].max) return STAGES[i]; }
+  return STAGES[3];
+}
+function getStudentCount(cls,nm) {
+  return ciRecords.filter(function(r){ return r.cls===cls&&r.nm===nm; }).length;
+}
+
+function loadCaterpillar() {
+  loadCheckins();
+  renderStageCards(0,null);
+  if (CU&&!isAdmin) {
+    var cnt=getStudentCount(CU.cls,CU.nm);
+    var stage=getStageFor(cnt);
+    var next=STAGES[STAGES.indexOf(stage)+1];
+    eid('caterBanner').style.display='';
+    st('caterName',CU.nm); st('caterCls',CU.cls);
+    st('caterTotal',cnt);
+    st('caterStage',stage.name+' '+stage.icon);
+    st('caterNext',next?next.min+' 本':'已達最高階！');
+    eid('caterDeco').textContent=stage.icon;
+    renderStageCards(cnt,stage);
+    var certSec=eid('certSection');
+    if(cnt>=CERT_THRESHOLD){
+      certSec.style.display='';
+      st('certName',CU.nm+'（'+CU.cls+'）');
+      st('certBooks',cnt);
+    } else { certSec.style.display='none'; }
+    sv('ci-cls',CU.cls); sv('ci-nm',CU.nm);
+  } else {
+    eid('caterBanner').style.display='none';
+    eid('certSection').style.display='none';
+    renderStageCards(0,null);
+  }
+  renderCheckins();
+}
+
+function renderStageCards(cnt,activeStage) {
+  var el=eid('stageRow'); if(!el) return;
+  var html='';
+  STAGES.forEach(function(s){
+    var completed=cnt>s.max;
+    var isCurrent=activeStage&&s.key===activeStage.key;
+    var pct=0;
+    if(completed){ pct=100; }
+    else if(isCurrent){ var range=s.max-s.min; pct=range>0?Math.min(Math.round((cnt-s.min)/range*100),100):100; }
+    var cls2=completed?'completed':isCurrent?'current':'locked';
+    var rng=s.min===0?'0–10 本':s.min+(s.max<9999?'–'+s.max:'+')+'本';
+    html+='<div class="stage-card '+cls2+'" style="--sc:'+s.color+'">'
+      +(completed?'<div class="s-done">✓ 完成</div>':'')
+      +(isCurrent?'<div class="s-cur-tag" style="background:'+s.color+'">進行中</div>':'')
+      +'<div class="s-ico">'+s.icon+'</div>'
+      +'<div class="s-name">'+s.name+'</div>'
+      +'<div class="s-range">'+rng+'</div>'
+      +'<div class="s-desc">'+s.desc+'</div>'
+      +'<div class="s-pw"><div class="s-pf" style="width:'+pct+'%;background:'+s.prog+'"></div></div>'
+      +'</div>';
+  });
+  el.innerHTML=html;
+}
+
+function addCheckin() {
+  var cls=gv('ci-cls').trim(), nm=gv('ci-nm').trim();
+  var title=gv('ci-title').trim(), thought=gv('ci-thought').trim();
+  if(!cls)   return toast('請填寫班級','err');
+  if(!nm)    return toast('請填寫姓名','err');
+  if(!title) return toast('請填寫書名','err');
+  loadCheckins();
+  var cnt=getStudentCount(cls,nm)+1;
+  var stage=getStageFor(cnt);
+  ciRecords.unshift({id:Date.now(),cls:cls,nm:nm,title:title,thought:thought,
+    ts:new Date().toLocaleString('zh-TW'),cnt:cnt,stageKey:stage.key});
+  saveCheckins();
+  toast('第 '+cnt+' 本打卡成功！目前階段：'+stage.name+' '+stage.icon);
+  clearCheckinForm(); loadCaterpillar();
+  if(cnt===CERT_THRESHOLD) setTimeout(function(){ toast('恭喜！已達'+cnt+'本，獲得閱讀達人證書！','ok'); },600);
+}
+function clearCheckinForm() {
+  ['ci-title','ci-thought'].forEach(function(id){ sv(id,''); });
+  if(CU&&!isAdmin){ sv('ci-cls',CU.cls); sv('ci-nm',CU.nm); }
+}
+
+function renderCheckins() {
+  loadCheckins();
+  var q=gv('ciFilter').toLowerCase();
+  var data=ciRecords.filter(function(r){ return !q||r.cls.toLowerCase().indexOf(q)>=0||r.nm.toLowerCase().indexOf(q)>=0; });
+  if(sortCheckinAsc) data=data.slice().reverse();
+  var el=eid('checkinList'); if(!el) return;
+  if(!data.length){ el.innerHTML='<div class="empty"><div class="empty-ico">📖</div><p>尚無打卡記錄，快來記錄第一本書吧！</p></div>'; return; }
+  var html='';
+  data.forEach(function(r,i){
+    var s=STAGES[0];
+    for(var j=0;j<STAGES.length;j++){ if(STAGES[j].key===r.stageKey){ s=STAGES[j]; break; } }
+    html+='<div class="ritem">'
+      +'<div class="rnum">'+(r.cnt||(data.length-i))+'</div>'
+      +'<div class="rbody">'
+      +'<div class="rtitle">'+r.title+'<span class="r-stag" style="background:rgba(0,0,0,.06);color:'+s.color+'">'+s.icon+' '+s.name+'</span></div>'
+      +'<div class="rmeta">'+r.nm+' ／ '+r.cls+' ／ '+r.ts+'</div>'
+      +(r.thought?'<div class="rthought">'+r.thought+'</div>':'')
+      +'</div>'
+      +'<button class="rdel" onclick="delCheckin('+r.id+')" title="刪除">🗑</button>'
+      +'</div>';
+  });
+  el.innerHTML=html;
+}
+
+function delCheckin(id) {
+  if(!confirm('確定刪除這筆打卡紀錄嗎？')) return;
+  loadCheckins();
+  ciRecords=ciRecords.filter(function(r){ return r.id!==id; });
+  saveCheckins(); toast('已刪除打卡紀錄'); loadCaterpillar();
+}
+
+function lookupStudent() {
+  var cls=gv('lk-cls').trim(), nm=gv('lk-nm').trim();
+  if(!cls||!nm) return toast('請填寫班級與姓名','err');
+  loadCheckins();
+  var mine=ciRecords.filter(function(r){ return r.cls===cls&&r.nm===nm; });
+  var cnt=mine.length;
+  var stage=getStageFor(cnt);
+  var next=STAGES[STAGES.indexOf(stage)+1];
+  var range=stage.max-stage.min;
+  var pct=cnt>stage.max?100:(range>0?Math.min(Math.round((cnt-stage.min)/range*100),100):100);
+  var nextHtml=next
+    ?'<div class="muted">距離「'+next.name+'」還需 <strong>'+Math.max(next.min-cnt,0)+'</strong> 本</div>'
+    :'<div style="color:#16a34a;font-weight:700">🏆 已達最高成蟲期！</div>';
+  var certHtml=cnt>=CERT_THRESHOLD
+    ?'<div style="margin-top:.75rem;padding:.6rem .9rem;background:linear-gradient(135deg,#052e16,#14532d);color:#fff;border-radius:8px;font-size:.82rem;text-align:center">🦋 恭喜！已達 '+cnt+' 本，榮獲<strong style="color:#fde68a"> 閱讀達人證書 </strong>！</div>':'';
+  var recHtml='';
+  if(mine.length){
+    recHtml='<div style="margin-top:.75rem"><div style="font-size:.75rem;color:var(--muted);margin-bottom:.4rem">最近 3 筆記錄：</div>';
+    mine.slice(0,3).forEach(function(r){
+      recHtml+='<div style="font-size:.78rem;padding:.2rem 0;border-bottom:1px solid var(--border)">📗 '+r.title+' <span class="muted">— '+r.ts+'</span></div>';
+    });
+    recHtml+='</div>';
+  }
+  var res=eid('lookupResult');
+  res.innerHTML='<div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:.7rem">'
+    +'<div style="font-size:2.5rem">'+stage.icon+'</div>'
+    +'<div><div style="font-weight:700;font-size:1rem">'+nm+'（'+cls+'）</div>'
+    +'<div class="muted">目前階段：<strong style="color:'+stage.color+'">'+stage.name+'</strong> ／ 累積 <strong>'+cnt+'</strong> 本</div>'
+    +nextHtml+'</div></div>'
+    +'<div style="margin-bottom:.5rem;font-size:.75rem;color:var(--muted)">本階段進度 '+pct+'%</div>'
+    +'<div class="s-pw"><div class="s-pf" style="width:'+pct+'%;background:'+stage.prog+'"></div></div>'
+    +certHtml+recHtml;
+  res.classList.add('show');
+}
+function clearLookup() {
+  sv('lk-cls',''); sv('lk-nm','');
+  var r=eid('lookupResult');
+  r.classList.remove('show'); r.innerHTML='';
+}
+</script>
+</body>
+</html>
